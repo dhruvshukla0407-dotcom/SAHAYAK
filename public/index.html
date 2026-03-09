@@ -2475,16 +2475,42 @@ function drawGpsCanvas() {
 }
 
 // ── Recording toggle ──
-function toggleRecord(btn) {
-  isRecording = !isRecording;
-  if (isRecording) {
-    btn.innerHTML = '<span class="rec-dot"></span> Recording';
-    btn.style.background = 'var(--red-dim)';
-    btn.style.color = '#EE8080';
-  } else {
-    btn.innerHTML = '⏸ Paused';
-    btn.style.background = 'var(--surface3)';
-    btn.style.color = 'var(--text2)';
+async function toggleRecord(btn) {
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '⏳ Processing...';
+  btn.disabled = true;
+
+  const action = !isRecording ? 'start' : 'stop';
+
+  try {
+    const res = await fetch('/api/drone/record', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action })
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      isRecording = !isRecording;
+      if (isRecording) {
+        btn.innerHTML = '<span class="rec-dot"></span> Recording';
+        btn.style.background = 'var(--red-dim)';
+        btn.style.color = '#EE8080';
+      } else {
+        btn.innerHTML = '⏸ Paused';
+        btn.style.background = 'var(--surface3)';
+        btn.style.color = 'var(--text2)';
+      }
+    } else {
+      alert('Recording failed: ' + data.message);
+      btn.innerHTML = originalHtml;
+    }
+  } catch (err) {
+    alert('Communication error with control server.');
+    btn.innerHTML = originalHtml;
+  } finally {
+    btn.disabled = false;
   }
 }
 
