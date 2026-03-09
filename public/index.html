@@ -6,6 +6,8 @@
 <title>AEGIS · Disaster Response Command</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="/socket.io/socket.io.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -174,12 +176,44 @@ hr { border: none; border-top: 1px solid var(--border); }
   background: #090D17;
   overflow: hidden;
 }
-.map-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(74,143,212,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74,143,212,0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
+#map {
+  width: 100%;
+  height: 100%;
+  background: #090D17;
+}
+/* Leaflet dark mode overrides */
+.leaflet-container { background: #090D17; }
+.leaflet-tile-pane { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); }
+.leaflet-control-zoom-in, .leaflet-control-zoom-out { background: var(--surface) !important; color: var(--text) !important; border: 1px solid var(--border) !important; }
+.leaflet-bar { border: none !important; box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important; }
+.drone-marker-icon {
+  background: rgba(74, 143, 212, 0.2);
+  border: 1px solid rgba(74, 143, 212, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(74, 143, 212, 0.4);
+}
+.drone-marker-inner {
+  width: 8px;
+  height: 8px;
+  background: #4A8FD4;
+  border-radius: 50%;
+}
+.node-marker-icon {
+  background: rgba(60, 184, 122, 0.15);
+  border: 1px solid rgba(60, 184, 122, 0.5);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.node-marker-inner {
+  width: 6px;
+  height: 6px;
+  background: #3CB87A;
+  border-radius: 2px;
 }
 
 /* ── Map zones ── */
@@ -829,71 +863,7 @@ hr { border: none; border-top: 1px solid var(--border); }
 
     <!-- Map -->
     <div class="map-wrap">
-      <div class="map-grid"></div>
-
-      <!-- Coordinates -->
-      <span class="coord" style="top:6px;left:10px;">24.860°N</span>
-      <span class="coord" style="top:6px;left:47%;">24.845°N</span>
-      <span class="coord" style="bottom:6px;left:10px;">91.830°E</span>
-      <span class="coord" style="bottom:6px;right:10px;">91.960°E</span>
-
-      <!-- SVG lines / rings -->
-      <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;">
-        <!-- Epicentre rings -->
-        <circle cx="43%" cy="52%" r="52" fill="none" stroke="rgba(224,82,82,0.18)" stroke-width="1"/>
-        <circle cx="43%" cy="52%" r="88" fill="none" stroke="rgba(224,82,82,0.09)" stroke-width="1"/>
-        <circle cx="43%" cy="52%" r="9" fill="rgba(224,82,82,0.22)" stroke="rgba(224,82,82,0.65)" stroke-width="1.5"/>
-        <!-- Drone path traces -->
-        <line x1="30%" y1="27%" x2="43%" y2="52%" stroke="rgba(74,143,212,0.18)" stroke-width="1" stroke-dasharray="5,4"/>
-        <line x1="64%" y1="44%" x2="43%" y2="52%" stroke="rgba(74,143,212,0.18)" stroke-width="1" stroke-dasharray="5,4"/>
-        <line x1="75%" y1="16%" x2="43%" y2="52%" stroke="rgba(74,143,212,0.12)" stroke-width="1" stroke-dasharray="5,4"/>
-        <!-- ECHO-3 return path -->
-        <line x1="18%" y1="63%" x2="6%" y2="87%" stroke="rgba(212,136,42,0.25)" stroke-width="1" stroke-dasharray="4,3"/>
-      </svg>
-
-      <!-- Epicentre label -->
-      <div style="position:absolute;left:40%;top:56%;font-size:10px;color:#EE8080;font-weight:600;font-family:'DM Mono',monospace;">⚡ M7.4 Epicentre</div>
-
-      <!-- Zones -->
-      <div class="mzone mz-crit glow-red" style="left:16%;top:14%;width:132px;">
-        <div class="mzone-name" style="color:#EE8080;">Zone Alpha</div>
-        <div class="mzone-sub" style="color:#EE8080;">12 survivors · Block 7 collapse</div>
-      </div>
-      <div class="mzone mz-crit glow-red" style="left:57%;top:30%;width:118px;">
-        <div class="mzone-name" style="color:#EE8080;">Zone Beta</div>
-        <div class="mzone-sub" style="color:#EE8080;">7 survivors · Hospital Wing</div>
-      </div>
-      <div class="mzone mz-warn" style="left:7%;top:57%;width:118px;">
-        <div class="mzone-name" style="color:#DBA55A;">Zone Gamma</div>
-        <div class="mzone-sub" style="color:#DBA55A;">Flood risk · 40 displaced</div>
-      </div>
-      <div class="mzone mz-warn" style="left:68%;top:9%;width:108px;">
-        <div class="mzone-name" style="color:#DBA55A;">Zone Delta</div>
-        <div class="mzone-sub" style="color:#DBA55A;">Gas trace detected</div>
-      </div>
-      <div class="mzone mz-safe" style="left:35%;top:65%;width:104px;">
-        <div class="mzone-name" style="color:#6ED4A0;">Zone Echo</div>
-        <div class="mzone-sub" style="color:#6ED4A0;">Evac route · Clear</div>
-      </div>
-
-      <!-- Drone dots + labels -->
-      <div class="ddot" style="left:30%;top:27%;"></div>
-      <div class="dlbl" style="left:32%;top:24%;">ALPHA-1 · 87%</div>
-
-      <div class="ddot" style="left:64%;top:44%;animation-delay:1.2s;"></div>
-      <div class="dlbl" style="left:66%;top:41%;">BRAVO-2 · 54%</div>
-
-      <div class="ddot" style="left:18%;top:63%;background:#D4882A;box-shadow:0 0 0 2px rgba(212,136,42,0.25);animation-delay:2s;"></div>
-      <div class="dlbl" style="left:20%;top:60%;color:#DBA55A;">ECHO-3 · 22% ↩</div>
-
-      <div class="ddot" style="left:75%;top:16%;animation-delay:.6s;"></div>
-      <div class="dlbl" style="left:77%;top:13%;">DELTA-4 · 91%</div>
-
-      <!-- Base camp -->
-      <div style="position:absolute;left:2%;bottom:4%;display:flex;align-items:center;gap:6px;background:rgba(9,13,23,0.82);border:1px solid rgba(60,184,122,0.3);border-radius:5px;padding:4px 9px;backdrop-filter:blur(4px);">
-        <span style="font-size:13px;">🏕</span>
-        <span style="font-size:10px;color:#6ED4A0;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:.06em;">BASE CAMP</span>
-      </div>
+      <div id="map"></div>
     </div>
 
   </main>
@@ -2076,9 +2046,36 @@ let droneData = {
 
 // --- Socket.IO Integration ---
 const socket = io();
+let mainMap;
+let markers = {};
+
+function initMainMap() {
+  mainMap = L.map('map', { zoomControl: false }).setView([24.8360, 91.9170], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+  }).addTo(mainMap);
+}
+
+document.addEventListener('DOMContentLoaded', initMainMap);
 
 socket.on('telemetry_update', (data) => {
   droneData = data;
+  
+  // Update Map Markers
+  for (const id in data) {
+    const d = data[id];
+    if (!markers[id]) {
+        const droneIcon = L.divIcon({
+          className: 'drone-marker-icon',
+          html: '<div class="drone-marker-inner"></div>',
+          iconSize: [20, 20]
+        });
+        markers[id] = L.marker([d.lat, d.lon], { icon: droneIcon }).addTo(mainMap)
+          .bindPopup(`<b>${id}</b><br>Alt: ${d.alt}m<br>Bat: ${d.bat}%`);
+    } else {
+        markers[id].setLatLng([d.lat, d.lon]);
+    }
+  }
   
   if (simInterval) { // only update drawing if feed is open
     const d = droneData[currentDrone];
