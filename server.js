@@ -17,7 +17,7 @@ app.use(express.static('public'));
 
 // --- ESP32-CAM Control Proxy ---
 // Replace this with your actual ESP32-CAM local IP address
-const ESP32_CAM_IP = 'http://192.168.1.100'; 
+const ESP32_CAM_IP = 'http://192.168.1.100';
 
 app.post('/api/drone/record', async (req, res) => {
   const { action } = req.body;
@@ -28,22 +28,34 @@ app.post('/api/drone/record', async (req, res) => {
     // E.g., Many firmwares use /control?var=record&val=1
     const commandVal = action === 'start' ? '1' : '0';
     const espUrl = `${ESP32_CAM_IP}/control?var=record&val=${commandVal}`;
-    
+
     console.log(`[API] Forwarding request to ESP32: ${espUrl}`);
-    
+
     // Set a timeout so the frontend doesn't hang forever if the ESP is offline
     const response = await axios.get(espUrl, { timeout: 3000 });
-    
+
     // Forward success back to frontend
     res.json({ success: true, message: `ESP32 returned: ${response.statusText}` });
   } catch (error) {
     console.error(`[API] ESP32 Communication Error:`, error.message);
     // Even if it fails, we let the frontend know so it can show an error
-    res.status(502).json({ 
-      success: false, 
+    res.status(502).json({
+      success: false,
       message: 'Failed to communicate with ESP32-CAM',
-      error: error.message 
+      error: error.message
     });
+  }
+});
+
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  console.log(`[AUTH] Login attempt for: ${username}`);
+  if (username === 'siddharth' && password === 'india@1234') {
+    console.log(`[AUTH] Login successful for: ${username}`);
+    res.json({ success: true, redirect: '/' });
+  } else {
+    console.warn(`[AUTH] Login failed for: ${username}`);
+    res.status(401).json({ success: false, message: 'Invalid credentials' });
   }
 });
 

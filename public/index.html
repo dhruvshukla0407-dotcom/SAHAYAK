@@ -5,10 +5,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AEGIS · Disaster Response Command</title>
+  <script>
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+      window.location.href = '/login.html';
+    }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="/socket.io/socket.io.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap"
     rel="stylesheet" />
@@ -1004,8 +1011,8 @@
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="dot dot-red"></span>
         <span style="font-size:13px;font-weight:600;color:#EE8080;">INCIDENT ACTIVE</span>
-        <span style="color:var(--text3);font-size:13px;">·</span>
-        <span style="color:var(--text2);font-size:13px;">SRM Nagar, Kattankulathur — Tamil Nadu</span>
+        <span style="color:var(--text2);font-size:13px;">·</span>
+        <span style="color:var(--text2);font-size:13px;">Earthquake M7.4 — SRM Nagar, Kattankulathur</span>
       </div>
     </div>
 
@@ -1078,7 +1085,7 @@
       <!-- Incident Summary -->
       <div class="incident-card">
         <div class="label" style="margin-bottom:10px;">Incident Overview</div>
-        <div style="font-size:15px;font-weight:700;line-height:1.2;margin-bottom:2px;">Disaster Response Zone</div>
+        <div style="font-size:15px;font-weight:700;line-height:1.2;margin-bottom:2px;">Earthquake + Flood</div>
         <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">SRM Nagar, Kattankulathur</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
           <div style="background:var(--surface3);border-radius:5px;padding:8px;">
@@ -1092,7 +1099,7 @@
           </div>
           <div style="background:var(--surface3);border-radius:5px;padding:8px;grid-column:span 2;">
             <div class="label" style="margin-bottom:3px;">Epicentre</div>
-            <div class="mono" style="font-size:12px;color:var(--text2);">12.823°N · 80.042°E</div>
+            <div class="mono" style="font-size:12px;color:var(--text2);">12.8231°N · 80.0442°E</div>
           </div>
         </div>
         <hr style="margin-bottom:10px;" />
@@ -1207,6 +1214,12 @@
               class="dot dot-amber"></span>Weather API — Degraded</div>
         </div>
       </div>
+      <div class="nav-section">
+        <button class="nav-item" onclick="logout()"
+          style="color:var(--red);border-top:1px solid var(--border);padding-top:12px;margin-top:4px;">
+          <span class="nav-icon">⏻</span>Logout Session
+        </button>
+      </div>
     </aside>
 
     <!-- ══════════════ CENTER ══════════════ -->
@@ -1257,7 +1270,7 @@
       <div class="map-toolbar">
         <div style="display:flex;align-items:center;gap:12px;">
           <span style="font-size:13px;font-weight:600;">Tactical Map</span>
-          <span style="font-size:12px;color:var(--text2);">Kattankulathur · Live GIS overlay</span>
+          <span style="font-size:12px;color:var(--text2);">SRM Nagar · Live overlay</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
           <!-- Legend inline -->
@@ -1284,7 +1297,18 @@
       </div>
 
       <!-- Map -->
-      <div id="map" class="map-wrap" style="height:100%; z-index:1;"></div>
+      <div class="map-wrap">
+        <div id="map" style="position:absolute;inset:0;"></div>
+
+        <!-- Overlays (Labels only, markers handled by Leaflet) -->
+        <div
+          style="position:absolute;left:2%;bottom:4%;display:flex;align-items:center;gap:6px;background:rgba(9,13,23,0.82);border:1px solid rgba(60,184,122,0.3);border-radius:5px;padding:4px 9px;backdrop-filter:blur(4px);z-index:1000;">
+          <span style="font-size:13px;">🏕</span>
+          <span
+            style="font-size:10px;color:#6ED4A0;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:.06em;">BASE
+            CAMP (SRM)</span>
+        </div>
+      </div>
 
     </main>
 
@@ -1902,8 +1926,8 @@
             <div id="hud-mode">MODE: AUTO</div>
           </div>
           <div class="hud-label" style="top:16px;right:20px;text-align:right;">
-            <div id="hud-lat">LAT: 12.8236°N</div>
-            <div id="hud-lon">LON: 80.0420°E</div>
+            <div id="hud-lat">LAT: 24.8360°N</div>
+            <div id="hud-lon">LON: 91.9170°E</div>
             <div id="hud-alt">ALT: 120 m AGL</div>
           </div>
           <div class="hud-label" style="bottom:16px;left:20px;">
@@ -1940,11 +1964,11 @@
             <div class="label" style="margin-bottom:10px;">Quick Telemetry</div>
             <div class="telem-row">
               <span class="telem-key">Latitude</span>
-              <span class="telem-val" id="tv-lat" style="color:#80B0DC;">12.8236°N</span>
+              <span class="telem-val" id="tv-lat" style="color:#80B0DC;">24.8360°N</span>
             </div>
             <div class="telem-row">
               <span class="telem-key">Longitude</span>
-              <span class="telem-val" id="tv-lon" style="color:#80B0DC;">80.0420°E</span>
+              <span class="telem-val" id="tv-lon" style="color:#80B0DC;">91.9170°E</span>
             </div>
             <div class="telem-row">
               <span class="telem-key">Altitude</span>
@@ -2017,9 +2041,9 @@
           style="position:absolute;top:16px;left:16px;background:rgba(7,13,26,0.88);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;backdrop-filter:blur(6px);min-width:200px;">
           <div class="label" style="margin-bottom:10px;">Live GPS</div>
           <div class="telem-row"><span class="telem-key">Latitude</span><span class="telem-val" id="gps-lat"
-              style="color:#80B0DC;">12.8236°N</span></div>
+              style="color:#80B0DC;">24.8360°N</span></div>
           <div class="telem-row"><span class="telem-key">Longitude</span><span class="telem-val" id="gps-lon"
-              style="color:#80B0DC;">80.0420°E</span></div>
+              style="color:#80B0DC;">91.9170°E</span></div>
           <div class="telem-row"><span class="telem-key">Altitude</span><span class="telem-val" id="gps-alt">120
               m</span></div>
           <div class="telem-row" style="border:none;"><span class="telem-key">Fix Type</span><span
@@ -2083,9 +2107,9 @@
           <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;">
             <div class="label" style="margin-bottom:12px;">Flight Parameters</div>
             <div class="telem-row"><span class="telem-key">Latitude</span><span class="telem-val" style="color:#80B0DC;"
-                id="full-lat">12.8236°N</span></div>
+                id="full-lat">12.8231°N</span></div>
             <div class="telem-row"><span class="telem-key">Longitude</span><span class="telem-val"
-                style="color:#80B0DC;" id="full-lon">80.0420°E</span></div>
+                style="color:#80B0DC;" id="full-lon">80.0442°E</span></div>
             <div class="telem-row"><span class="telem-key">Altitude (MSL)</span><span class="telem-val"
                 id="full-msl">142 m</span></div>
             <div class="telem-row"><span class="telem-key">Altitude (AGL)</span><span class="telem-val"
@@ -2264,42 +2288,6 @@
   <!-- ══════════════════════ END MODAL ══════════════════════ -->
 
   <script>
-    // --- Leaflet Map Setup ---
-    const map = L.map('map', {
-      center: [12.8236, 80.0420],
-      zoom: 16,
-      zoomControl: false,
-      attributionControl: false
-    });
-
-    // Use a dark map tile layer that looks premium
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 20
-    }).addTo(map);
-
-    const droneMarkers = {};
-    const socket = io();
-
-    socket.on('telemetry_update', (data) => {
-      for (const id in data) {
-        const d = data[id];
-        if (!droneMarkers[id]) {
-          droneMarkers[id] = L.marker([d.lat, d.lon], {
-            icon: L.divIcon({
-              className: 'custom-drone-icon',
-              html: `<div style="width:12px;height:12px;background:var(--blue);border-radius:50%;box-shadow:0 0 0 2px rgba(74,143,212,0.3);position:relative;">
-                   <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:rgba(11,14,19,0.8);padding:2px 6px;border-radius:4px;font-size:9px;white-space:nowrap;color:#80B0DC;border:1px solid var(--border);">${id}</div>
-                 </div>`,
-              iconSize: [12, 12],
-              iconAnchor: [6, 6]
-            })
-          }).addTo(map);
-        } else {
-          droneMarkers[id].setLatLng([d.lat, d.lon]);
-        }
-      }
-    });
-
     // ── Clock ──
     let s = 4 * 3600 + 23 * 17;
     setInterval(() => {
@@ -2821,17 +2809,71 @@
 
     // ── Drone data per drone ──
     let droneData = {
-      'ALPHA-1': { lat: 24.8360, lon: 91.9170, alt: 120, spd: 8.4, hdg: 214, bat: 87, sig: -62, name: 'ALPHA-1', mode: 'AUTO' },
-      'BRAVO-2': { lat: 24.8341, lon: 91.9203, alt: 85, spd: 6.1, hdg: 178, bat: 54, sig: -70, name: 'BRAVO-2', mode: 'AUTO' },
-      'ECHO-3': { lat: 24.8285, lon: 91.9115, alt: 200, spd: 9.8, hdg: 310, bat: 22, sig: -76, name: 'ECHO-3', mode: 'RTL' },
-      'DELTA-4': { lat: 24.8410, lon: 91.9248, alt: 150, spd: 7.3, hdg: 90, bat: 91, sig: -58, name: 'DELTA-4', mode: 'AUTO' },
+      'ALPHA-1': { lat: 12.8236, lon: 80.0420, alt: 120, spd: 8.4, hdg: 214, bat: 87, sig: -62, name: 'ALPHA-1', mode: 'AUTO' },
+      'BRAVO-2': { lat: 12.8225, lon: 80.0440, alt: 85, spd: 6.1, hdg: 178, bat: 54, sig: -70, name: 'BRAVO-2', mode: 'AUTO' },
+      'ECHO-3': { lat: 12.8200, lon: 80.0380, alt: 200, spd: 9.8, hdg: 310, bat: 22, sig: -76, name: 'ECHO-3', mode: 'RTL' },
+      'DELTA-4': { lat: 12.8250, lon: 80.0460, alt: 150, spd: 7.3, hdg: 90, bat: 91, sig: -58, name: 'DELTA-4', mode: 'AUTO' },
     };
 
+    // Leaflet Map Initialization
+    let map, markers = {};
+
+    function initMap() {
+      map = L.map('map', {
+        center: [12.8231, 80.0442],
+        zoom: 16,
+        zoomControl: false,
+        attributionControl: false
+      });
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20
+      }).addTo(map);
+
+      // Initialize markers
+      for (const id in droneData) {
+        const d = droneData[id];
+        markers[id] = L.marker([d.lat, d.lon], {
+          icon: L.divIcon({
+            className: 'custom-drone-icon',
+            html: `<div class="ddot" style="position:relative;margin:-4px 0 0 -4px;box-shadow:0 0 10px var(--blue);"></div><div class="dlbl" style="margin-top:4px;">${id}</div>`
+          })
+        }).addTo(map);
+      }
+
+      // Set up SRM Zones
+      const zones = [
+        { name: 'Zone Alpha', center: [12.8236, 80.0420], color: '#EE8080', label: '12 survivors · Block 7' },
+        { name: 'Zone Beta', center: [12.8225, 80.0440], color: '#EE8080', label: '7 survivors · Hospital' },
+        { name: 'Zone Gamma', center: [12.8200, 80.0380], color: '#DBA55A', label: 'Flood risk · Displaced' },
+        { name: 'Zone Delta', center: [12.8250, 80.0460], color: '#DBA55A', label: 'Gas trace detected' }
+      ];
+
+      zones.forEach(z => {
+        L.circle(z.center, {
+          color: z.color,
+          fillColor: z.color,
+          fillOpacity: 0.1,
+          radius: 80
+        }).addTo(map).bindTooltip(`<strong>${z.name}</strong><br>${z.label}`, { permanent: true, direction: 'top', className: 'zone-tooltip' });
+      });
+    }
+
+    // Call initMap on window load
+    window.addEventListener('load', initMap);
+
     // --- Socket.IO Integration ---
-    // const socket = io();
+    const socket = io();
 
     socket.on('telemetry_update', (data) => {
       droneData = data;
+
+      // Update Leaflet markers
+      for (const id in droneData) {
+        if (markers[id]) {
+          markers[id].setLatLng([droneData[id].lat, droneData[id].lon]);
+        }
+      }
 
       if (simInterval) { // only update drawing if feed is open
         const d = droneData[currentDrone];
@@ -2839,7 +2881,6 @@
           trail.push({ lat: d.lat, lon: d.lon });
           if (trail.length > MAX_TRAIL) trail.shift();
           altHistory.push(Math.round(d.alt));
-          if (altHistory.length > 60) altHistory.shift();
         }
         updateAllTelemetry();
         drawVideoCanvas();
@@ -3129,9 +3170,9 @@
       const ring = document.getElementById('gpsRing');
       if (!dot || !ring) return;
       const d = droneData[currentDrone];
-      // Normalise lat/lon to map bounds (simple linear mapping)
-      const latRange = [24.82, 24.86];
-      const lonRange = [91.90, 91.95];
+      // Normalise lat/lon to map bounds (SRM Nagar)
+      const latRange = [12.81, 12.84];
+      const lonRange = [80.03, 80.06];
       const xPct = ((d.lon - lonRange[0]) / (lonRange[1] - lonRange[0]) * 100).toFixed(1);
       const yPct = (100 - (d.lat - latRange[0]) / (latRange[1] - latRange[0]) * 100).toFixed(1);
       dot.style.left = xPct + '%';
@@ -3856,9 +3897,9 @@
           <span style="font-size:11px;color:var(--text2);">Region:</span>
           <select
             style="background:var(--surface3);border:1px solid var(--border2);border-radius:5px;padding:4px 9px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;outline:none;cursor:pointer;">
-            <option>SRM Nagar (Full)</option>
-            <option>SRM University Basin</option>
-            <option>Grand Southern Trunk Road</option>
+            <option>Sylhet District (Full)</option>
+            <option>Surma River Basin</option>
+            <option>Jaintia Hills</option>
             <option>Urban Core</option>
           </select>
         </div>
@@ -4136,14 +4177,18 @@
       const py = Math.round((e.clientY - rect.top) * scaleY);
       const ctx = canvas.getContext('2d');
       const p = ctx.getImageData(px, py, 1, 1).data;
-      const lon = (80.040 + (px / canvas.width) * 0.004).toFixed(4);
-      const lat = (12.825 - (py / canvas.height) * 0.003).toFixed(4);
+      const lon = (91.88 + (px / canvas.width) * 0.08).toFixed(4);
+      const lat = (24.86 - (py / canvas.height) * 0.04).toFixed(4);
       const ndviEst = (((p[1] - p[0]) / (p[1] + p[0] + 1))).toFixed(3);
       document.getElementById('pixel-info').innerHTML =
         `<strong style="color:var(--text);">Position</strong><br>${lat}°N · ${lon}°E<br>` +
         `<strong style="color:var(--text);">Pixel (R,G,B)</strong><br>${p[0]}, ${p[1]}, ${p[2]}<br>` +
         `<strong style="color:var(--text);">Est. NDVI</strong>&nbsp; ${ndviEst}<br>` +
         `<strong style="color:var(--text);">Band</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${bandMeta[satBand]?.label || satBand}`;
+    }
+    function logout() {
+      sessionStorage.removeItem('isLoggedIn');
+      window.location.href = '/login.html';
     }
   </script>
 </body>
