@@ -189,6 +189,8 @@
     </div>
 
     <script>
+        const BACKEND_URL = window.location.port === '3000' ? '' : 'http://localhost:3000';
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
@@ -196,7 +198,7 @@
             const error = document.getElementById('error');
 
             try {
-                const response = await fetch('/api/login', {
+                const response = await fetch(`${BACKEND_URL}/api/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })

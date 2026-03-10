@@ -2288,6 +2288,8 @@
   <!-- ══════════════════════ END MODAL ══════════════════════ -->
 
   <script>
+    const BACKEND_URL = window.location.port === '3000' ? '' : 'http://localhost:3000';
+
     // ── Clock ──
     let s = 4 * 3600 + 23 * 17;
     setInterval(() => {
@@ -2863,7 +2865,7 @@
     window.addEventListener('load', initMap);
 
     // --- Socket.IO Integration ---
-    const socket = io();
+    const socket = io(BACKEND_URL);
 
     socket.on('telemetry_update', (data) => {
       droneData = data;
@@ -3277,7 +3279,7 @@
       const action = !isRecording ? 'start' : 'stop';
 
       try {
-        const res = await fetch('/api/drone/record', {
+        const res = await fetch(`${BACKEND_URL}/api/drone/record`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action })
