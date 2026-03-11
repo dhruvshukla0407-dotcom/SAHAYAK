@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AEGIS · Disaster Response Command</title>
+  <title>AEGIS Â· Disaster Response Command</title>
   <script>
     if (sessionStorage.getItem('isLoggedIn') !== 'true') {
       window.location.href = 'login.html';
@@ -15,7 +15,7 @@
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap"
     rel="stylesheet" />
@@ -65,7 +65,7 @@
       font-family: 'DM Mono', monospace;
     }
 
-    /* ── Topbar ── */
+    /* â”€â”€ Topbar â”€â”€ */
     .topbar {
       height: 52px;
       background: var(--surface);
@@ -78,7 +78,7 @@
       gap: 16px;
     }
 
-    /* ── Shell ── */
+    /* â”€â”€ Shell â”€â”€ */
     .shell {
       flex: 1;
       display: grid;
@@ -86,7 +86,7 @@
       overflow: hidden;
     }
 
-    /* ── Sidebar ── */
+    /* â”€â”€ Sidebar â”€â”€ */
     .sidebar {
       background: var(--surface);
       border-right: 1px solid var(--border);
@@ -96,7 +96,7 @@
       padding: 16px 0;
     }
 
-    /* ── Center ── */
+    /* â”€â”€ Center â”€â”€ */
     .center {
       display: flex;
       flex-direction: column;
@@ -104,7 +104,7 @@
       background: var(--bg);
     }
 
-    /* ── Right panel ── */
+    /* â”€â”€ Right panel â”€â”€ */
     .rightpanel {
       background: var(--surface);
       border-left: 1px solid var(--border);
@@ -113,7 +113,7 @@
       overflow: hidden;
     }
 
-    /* ── Typography ── */
+    /* â”€â”€ Typography â”€â”€ */
     .label {
       font-size: 10px;
       font-weight: 600;
@@ -122,7 +122,7 @@
       color: var(--text3);
     }
 
-    /* ── Status pill ── */
+    /* â”€â”€ Status pill â”€â”€ */
     .pill {
       display: inline-flex;
       align-items: center;
@@ -164,7 +164,7 @@
       border: 1px solid var(--border);
     }
 
-    /* ── Dot ── */
+    /* â”€â”€ Dot â”€â”€ */
     .dot {
       width: 6px;
       height: 6px;
@@ -203,13 +203,13 @@
       }
     }
 
-    /* ── Divider ── */
+    /* â”€â”€ Divider â”€â”€ */
     hr {
       border: none;
       border-top: 1px solid var(--border);
     }
 
-    /* ── Sidebar nav item ── */
+    /* â”€â”€ Sidebar nav item â”€â”€ */
     .nav-section {
       padding: 0 12px;
       margin-bottom: 4px;
@@ -259,7 +259,7 @@
       padding: 1px 6px;
     }
 
-    /* ── Incident card (sidebar) ── */
+    /* â”€â”€ Incident card (sidebar) â”€â”€ */
     .incident-card {
       margin: 12px;
       background: var(--surface2);
@@ -268,7 +268,7 @@
       padding: 14px;
     }
 
-    /* ── Progress bar ── */
+    /* â”€â”€ Progress bar â”€â”€ */
     .bar-track {
       height: 4px;
       background: rgba(255, 255, 255, 0.05);
@@ -281,7 +281,7 @@
       border-radius: 99px;
     }
 
-    /* ── Map ── */
+    /* â”€â”€ Map â”€â”€ */
     .map-wrap {
       flex: 1;
       position: relative;
@@ -298,7 +298,7 @@
       background-size: 32px 32px;
     }
 
-    /* ── Map zones ── */
+    /* â”€â”€ Map zones â”€â”€ */
     .mzone {
       position: absolute;
       border-radius: 6px;
@@ -353,7 +353,7 @@
       margin-top: 1px;
     }
 
-    /* ── Drone dots ── */
+    /* â”€â”€ Drone dots â”€â”€ */
     .ddot {
       position: absolute;
       width: 9px;
@@ -382,7 +382,7 @@
       white-space: nowrap;
     }
 
-    /* ── Map legend ── */
+    /* â”€â”€ Map legend â”€â”€ */
     .map-legend {
       position: absolute;
       bottom: 12px;
@@ -394,7 +394,7 @@
       backdrop-filter: blur(8px);
     }
 
-    /* ── Stat widget ── */
+    /* â”€â”€ Stat widget â”€â”€ */
     .stat-row {
       display: flex;
       align-items: baseline;
@@ -419,7 +419,7 @@
       font-weight: 500;
     }
 
-    /* ── Section header (right panel) ── */
+    /* â”€â”€ Section header (right panel) â”€â”€ */
     .section-hdr {
       padding: 14px 16px 10px;
       display: flex;
@@ -428,7 +428,7 @@
       flex-shrink: 0;
     }
 
-    /* ── Priority item ── */
+    /* â”€â”€ Priority item â”€â”€ */
     .pitem {
       padding: 11px 16px;
       border-bottom: 1px solid var(--border);
@@ -456,7 +456,7 @@
       margin-top: 1px;
     }
 
-    /* ── Feed item ── */
+    /* â”€â”€ Feed item â”€â”€ */
     .fitem {
       padding: 11px 16px;
       border-bottom: 1px solid var(--border);
@@ -472,7 +472,7 @@
       min-height: 40px;
     }
 
-    /* ── Dispatch button ── */
+    /* â”€â”€ Dispatch button â”€â”€ */
     .dbtn {
       width: 100%;
       padding: 9px 14px;
@@ -508,7 +508,7 @@
       flex-shrink: 0;
     }
 
-    /* ── Drone row ── */
+    /* â”€â”€ Drone row â”€â”€ */
     .drone-row {
       padding: 10px 12px;
       border-radius: 6px;
@@ -517,7 +517,7 @@
       margin-bottom: 8px;
     }
 
-    /* ── Tab bar ── */
+    /* â”€â”€ Tab bar â”€â”€ */
     .tab-bar {
       display: flex;
       gap: 2px;
@@ -546,7 +546,7 @@
       color: var(--text);
     }
 
-    /* ── Ticker ── */
+    /* â”€â”€ Ticker â”€â”€ */
     .ticker-clip {
       overflow: hidden;
     }
@@ -568,7 +568,7 @@
       }
     }
 
-    /* ── Map toolbar ── */
+    /* â”€â”€ Map toolbar â”€â”€ */
     .map-toolbar {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -579,7 +579,7 @@
       flex-shrink: 0;
     }
 
-    /* ── Stat grid ── */
+    /* â”€â”€ Stat grid â”€â”€ */
     .stat-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -596,13 +596,13 @@
       border-right: none;
     }
 
-    /* ── Sensor row ── */
+    /* â”€â”€ Sensor row â”€â”€ */
     .sens-row {
       padding: 10px 16px;
       border-bottom: 1px solid var(--border);
     }
 
-    /* ── Scroll ── */
+    /* â”€â”€ Scroll â”€â”€ */
     .scroll {
       overflow-y: auto;
     }
@@ -624,7 +624,7 @@
       background: rgba(255, 255, 255, 0.14);
     }
 
-    /* ── Coord text ── */
+    /* â”€â”€ Coord text â”€â”€ */
     .coord {
       font-family: 'DM Mono', monospace;
       font-size: 9px;
@@ -632,12 +632,12 @@
       position: absolute;
     }
 
-    /* ── Subtle glow on crit zone ── */
+    /* â”€â”€ Subtle glow on crit zone â”€â”€ */
     .glow-red {
       box-shadow: 0 0 20px rgba(224, 82, 82, 0.12);
     }
 
-    /* ── Alert strip ── */
+    /* â”€â”€ Alert strip â”€â”€ */
     .alert-strip {
       background: rgba(224, 82, 82, 0.06);
       border-bottom: 1px solid rgba(224, 82, 82, 0.18);
@@ -648,7 +648,7 @@
       flex-shrink: 0;
     }
 
-    /* ══ LIVE FEED MODAL ══ */
+    /* â•â• LIVE FEED MODAL â•â• */
     .feed-modal-overlay {
       position: fixed;
       inset: 0;
@@ -992,7 +992,7 @@
 
 <body>
 
-  <!-- ══════════════════════════════════════ TOPBAR ══ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• TOPBAR â•â• -->
   <header class="topbar">
     <!-- Left: brand + incident -->
     <div style="display:flex;align-items:center;gap:20px;flex-shrink:0;">
@@ -1011,8 +1011,8 @@
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="dot dot-red"></span>
         <span style="font-size:13px;font-weight:600;color:#EE8080;">INCIDENT ACTIVE</span>
-        <span style="color:var(--text2);font-size:13px;">·</span>
-        <span style="color:var(--text2);font-size:13px;">Earthquake M7.4 — SRM Nagar, Kattankulathur</span>
+        <span style="color:var(--text2);font-size:13px;">Â·</span>
+        <span style="color:var(--text2);font-size:13px;">Earthquake M7.4 â€” SRM Nagar, Kattankulathur</span>
       </div>
     </div>
 
@@ -1022,21 +1022,21 @@
         style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:5px 12px;overflow:hidden;">
         <div class="ticker-clip">
           <div class="ticker-track mono" style="font-size:11px;color:var(--text2);">
-            <span style="margin-right:56px;">⬤&nbsp;<span style="color:#EE8080;">CRITICAL</span>&nbsp;&nbsp;Zone Alpha:
-              12 survivors unrescued — structural collapse imminent&nbsp;&nbsp;&nbsp;⬤&nbsp;<span
+            <span style="margin-right:56px;">â¬¤&nbsp;<span style="color:#EE8080;">CRITICAL</span>&nbsp;&nbsp;Zone Alpha:
+              12 survivors unrescued â€” structural collapse imminent&nbsp;&nbsp;&nbsp;â¬¤&nbsp;<span
                 style="color:#DBA55A;">WARNING</span>&nbsp;&nbsp;Cyclone VEERA: Landfall in 02h
-              30m&nbsp;&nbsp;&nbsp;⬤&nbsp;<span style="color:#EE8080;">CRITICAL</span>&nbsp;&nbsp;Flood +3.8m above
-              danger threshold — eastern sectors&nbsp;&nbsp;&nbsp;⬤&nbsp;<span
-                style="color:#6ED4A0;">UPDATE</span>&nbsp;&nbsp;8 survivors extracted — Grid 14-F, Team
-              Bravo&nbsp;&nbsp;&nbsp;⬤&nbsp;<span style="color:#DBA55A;">WARNING</span>&nbsp;&nbsp;ECHO-3 battery 22% —
+              30m&nbsp;&nbsp;&nbsp;â¬¤&nbsp;<span style="color:#EE8080;">CRITICAL</span>&nbsp;&nbsp;Flood +3.8m above
+              danger threshold â€” eastern sectors&nbsp;&nbsp;&nbsp;â¬¤&nbsp;<span
+                style="color:#6ED4A0;">UPDATE</span>&nbsp;&nbsp;8 survivors extracted â€” Grid 14-F, Team
+              Bravo&nbsp;&nbsp;&nbsp;â¬¤&nbsp;<span style="color:#DBA55A;">WARNING</span>&nbsp;&nbsp;ECHO-3 battery 22% â€”
               Zone C coverage gap imminent&nbsp;&nbsp;&nbsp;</span>
-            <span style="margin-right:56px;">⬤&nbsp;<span style="color:#EE8080;">CRITICAL</span>&nbsp;&nbsp;Zone Alpha:
-              12 survivors unrescued — structural collapse imminent&nbsp;&nbsp;&nbsp;⬤&nbsp;<span
+            <span style="margin-right:56px;">â¬¤&nbsp;<span style="color:#EE8080;">CRITICAL</span>&nbsp;&nbsp;Zone Alpha:
+              12 survivors unrescued â€” structural collapse imminent&nbsp;&nbsp;&nbsp;â¬¤&nbsp;<span
                 style="color:#DBA55A;">WARNING</span>&nbsp;&nbsp;Cyclone VEERA: Landfall in 02h
-              30m&nbsp;&nbsp;&nbsp;⬤&nbsp;<span style="color:#EE8080;">CRITICAL</span>&nbsp;&nbsp;Flood +3.8m above
-              danger threshold — eastern sectors&nbsp;&nbsp;&nbsp;⬤&nbsp;<span
-                style="color:#6ED4A0;">UPDATE</span>&nbsp;&nbsp;8 survivors extracted — Grid 14-F, Team
-              Bravo&nbsp;&nbsp;&nbsp;⬤&nbsp;<span style="color:#DBA55A;">WARNING</span>&nbsp;&nbsp;ECHO-3 battery 22% —
+              30m&nbsp;&nbsp;&nbsp;â¬¤&nbsp;<span style="color:#EE8080;">CRITICAL</span>&nbsp;&nbsp;Flood +3.8m above
+              danger threshold â€” eastern sectors&nbsp;&nbsp;&nbsp;â¬¤&nbsp;<span
+                style="color:#6ED4A0;">UPDATE</span>&nbsp;&nbsp;8 survivors extracted â€” Grid 14-F, Team
+              Bravo&nbsp;&nbsp;&nbsp;â¬¤&nbsp;<span style="color:#DBA55A;">WARNING</span>&nbsp;&nbsp;ECHO-3 battery 22% â€”
               Zone C coverage gap imminent&nbsp;&nbsp;&nbsp;</span>
           </div>
         </div>
@@ -1057,29 +1057,29 @@
           CO</div>
         <div>
           <div style="font-size:13px;font-weight:600;line-height:1.2;">Cmd. Operations</div>
-          <div style="font-size:11px;color:var(--text2);">Incident Command · Clearance L3</div>
+          <div style="font-size:11px;color:var(--text2);">Incident Command Â· Clearance L3</div>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- ══════════════════════════════════════ ALERT STRIP ══ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• ALERT STRIP â•â• -->
   <div class="alert-strip">
     <span class="dot dot-red"></span>
     <span style="font-size:11px;font-weight:700;color:#EE8080;letter-spacing:.06em;text-transform:uppercase;">Active
       Alert</span>
     <span style="color:var(--border2);font-size:11px;">|</span>
     <span style="font-size:12px;color:var(--text2);">Aftershock M4.8 predicted within <strong
-        style="color:#EE8080;">8–14 min</strong> (71% confidence). All ground teams: shelter in place until
+        style="color:#EE8080;">8â€“14 min</strong> (71% confidence). All ground teams: shelter in place until
       clearance.</span>
     <span style="margin-left:auto;cursor:pointer;color:var(--text3);font-size:11px;font-weight:500;">Acknowledge
-      ×</span>
+      Ã—</span>
   </div>
 
-  <!-- ══════════════════════════════════════ SHELL ══ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• SHELL â•â• -->
   <div class="shell">
 
-    <!-- ══════════════ LEFT SIDEBAR ══════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• LEFT SIDEBAR â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <aside class="sidebar">
 
       <!-- Incident Summary -->
@@ -1099,7 +1099,7 @@
           </div>
           <div style="background:var(--surface3);border-radius:5px;padding:8px;grid-column:span 2;">
             <div class="label" style="margin-bottom:3px;">Epicentre</div>
-            <div class="mono" style="font-size:12px;color:var(--text2);">12.8231°N · 80.0442°E</div>
+            <div class="mono" style="font-size:12px;color:var(--text2);">12.8231Â\u00B0N Â· 80.0442Â\u00B0E</div>
           </div>
         </div>
         <hr style="margin-bottom:10px;" />
@@ -1109,7 +1109,7 @@
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:12px;color:var(--text2);">Secondary: Cyclone</span>
-          <span class="pill pill-amber">T−02:30</span>
+          <span class="pill pill-amber">Tâˆ’02:30</span>
         </div>
       </div>
 
@@ -1118,22 +1118,22 @@
       <!-- Navigation -->
       <div class="nav-section">
         <div class="label" style="padding:0 10px;margin-bottom:6px;">Navigation</div>
-        <button class="nav-item active"><span class="nav-icon">⊞</span>Overview</button>
-        <button class="nav-item"><span class="nav-icon">⌖</span>Tactical Map <span class="nav-badge">3</span></button>
+        <button class="nav-item active"><span class="nav-icon">âŠž</span>Overview</button>
+        <button class="nav-item"><span class="nav-icon">âŒ–</span>Tactical Map <span class="nav-badge">3</span></button>
         <button class="nav-item" onclick="openFeedModal()">
-          <span class="nav-icon">📡</span>Live Drone Feed
+          <span class="nav-icon">ðŸ“¡</span>Live Drone Feed
           <span
             style="margin-left:auto;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#EE8080;"><span
               style="width:6px;height:6px;background:var(--red);border-radius:50%;animation:blink .8s step-end infinite;display:inline-block;"></span>LIVE</span>
         </button>
-        <button class="nav-item" onclick="openProbModal()"><span class="nav-icon">🔮</span>Disaster Predictor <span
+        <button class="nav-item" onclick="openProbModal()"><span class="nav-icon">ðŸ”®</span>Disaster Predictor <span
             style="margin-left:auto;background:rgba(99,102,241,0.2);color:#A5B4FC;border-radius:10px;font-size:10px;font-weight:700;padding:1px 6px;">AI</span></button>
-        <button class="nav-item" onclick="openSatModal()"><span class="nav-icon">🛰️</span>Satellite Sensing <span
+        <button class="nav-item" onclick="openSatModal()"><span class="nav-icon">ðŸ›\u00B0ï¸</span>Satellite Sensing <span
             style="margin-left:auto;background:rgba(16,185,129,0.15);color:#6ED4A0;border-radius:10px;font-size:10px;font-weight:700;padding:1px 6px;">NEW</span></button>
-        <button class="nav-item"><span class="nav-icon">◈</span>Drone Fleet</button>
-        <button class="nav-item"><span class="nav-icon">⊕</span>Rescue Teams</button>
-        <button class="nav-item"><span class="nav-icon">⧖</span>Sensor Network</button>
-        <button class="nav-item"><span class="nav-icon">≡</span>Incident Log</button>
+        <button class="nav-item"><span class="nav-icon">â—ˆ</span>Drone Fleet</button>
+        <button class="nav-item"><span class="nav-icon">âŠ•</span>Rescue Teams</button>
+        <button class="nav-item"><span class="nav-icon">â§–</span>Sensor Network</button>
+        <button class="nav-item"><span class="nav-icon">â‰¡</span>Incident Log</button>
       </div>
 
       <hr style="margin:8px 0;" />
@@ -1177,7 +1177,7 @@
             <span style="font-weight:600;font-size:12px;">ECHO-3</span>
             <span class="pill pill-amber" style="font-size:10px;">Returning</span>
           </div>
-          <div style="font-size:11px;color:#DBA55A;margin-bottom:5px;">⚠ Low battery — Zone Echo uncovered</div>
+          <div style="font-size:11px;color:#DBA55A;margin-bottom:5px;">âš  Low battery â€” Zone Echo uncovered</div>
           <div class="bar-track">
             <div class="bar-fill" style="width:22%;background:#E05252;"></div>
           </div>
@@ -1206,28 +1206,28 @@
         <div style="display:flex;flex-direction:column;gap:5px;padding:4px 10px;">
           <div onclick="openPredictiveModal()"
             style="display:flex;align-items:center;gap:6px;font-size:11px;color:#80B0DC;cursor:pointer;background:rgba(74,143,212,0.1);padding:8px;border-radius:6px;border:1px solid rgba(74,143,212,0.2);">
-            <span class="nav-icon" style="font-size:14px;">🧠</span>
+            <span class="nav-icon" style="font-size:14px;">ðŸ§ </span>
             <span style="font-weight:600;">AI Predictive Intel</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);margin-top:8px;"><span
-              class="dot dot-green"></span>AI Core — Online</div>
+              class="dot dot-green"></span>AI Core â€” Online</div>
           <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);"><span
-              class="dot dot-blue"></span>Satellite Link — Active</div>
+              class="dot dot-blue"></span>Satellite Link â€” Active</div>
           <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);"><span
-              class="dot dot-green"></span>Mesh Network — 94%</div>
+              class="dot dot-green"></span>Mesh Network â€” 94%</div>
           <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);"><span
-              class="dot dot-amber"></span>Weather API — Degraded</div>
+              class="dot dot-amber"></span>Weather API â€” Degraded</div>
         </div>
       </div>
       <div class="nav-section">
         <button class="nav-item" onclick="logout()"
           style="color:var(--red);border-top:1px solid var(--border);padding-top:12px;margin-top:4px;">
-          <span class="nav-icon">⏻</span>Logout Session
+          <span class="nav-icon">â»</span>Logout Session
         </button>
       </div>
     </aside>
 
-    <!-- ══════════════ CENTER ══════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• CENTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <main class="center">
 
       <!-- Stat strip -->
@@ -1237,14 +1237,14 @@
           <div class="stat-row">
             <span class="stat-val" style="color:#EE8080;">847</span>
           </div>
-          <div class="stat-delta" style="color:#EE8080;margin-top:4px;">↑ 23 detected in last 30 min</div>
+          <div class="stat-delta" style="color:#EE8080;margin-top:4px;">â†‘ 23 detected in last 30 min</div>
         </div>
         <div class="stat-cell">
           <div class="label" style="margin-bottom:6px;">Successfully Rescued</div>
           <div class="stat-row">
             <span class="stat-val" style="color:#6ED4A0;">312</span>
           </div>
-          <div class="stat-delta" style="color:#6ED4A0;margin-top:4px;">↑ 8 in last 15 min · On track</div>
+          <div class="stat-delta" style="color:#6ED4A0;margin-top:4px;">â†‘ 8 in last 15 min Â· On track</div>
         </div>
         <div class="stat-cell">
           <div class="label" style="margin-bottom:6px;">Teams Deployed</div>
@@ -1275,7 +1275,7 @@
       <div class="map-toolbar">
         <div style="display:flex;align-items:center;gap:12px;">
           <span style="font-size:13px;font-weight:600;">Tactical Map</span>
-          <span style="font-size:12px;color:var(--text2);">SRM Nagar · Live overlay</span>
+          <span style="font-size:12px;color:var(--text2);">SRM Nagar Â· Live overlay</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
           <!-- Legend inline -->
@@ -1308,7 +1308,7 @@
         <!-- Overlays (Labels only, markers handled by Leaflet) -->
         <div
           style="position:absolute;left:2%;bottom:4%;display:flex;align-items:center;gap:6px;background:rgba(9,13,23,0.82);border:1px solid rgba(60,184,122,0.3);border-radius:5px;padding:4px 9px;backdrop-filter:blur(4px);z-index:1000;">
-          <span style="font-size:13px;">🏕</span>
+          <span style="font-size:13px;">ðŸ•</span>
           <span
             style="font-size:10px;color:#6ED4A0;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:.06em;">BASE
             CAMP (SRM)</span>
@@ -1317,7 +1317,7 @@
 
     </main>
 
-    <!-- ══════════════ RIGHT PANEL ══════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• RIGHT PANEL â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <aside class="rightpanel">
 
       <!-- Priority Queue -->
@@ -1334,13 +1334,13 @@
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:3px;">
             <span style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Zone
-              Alpha — Block 7</span>
+              Alpha â€” Block 7</span>
             <span class="pill pill-red" style="font-size:10px;flex-shrink:0;">Urgent</span>
           </div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Collapsed building · 12 survivors trapped
+          <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Collapsed building Â· 12 survivors trapped
           </div>
           <div style="display:flex;gap:5px;flex-wrap:wrap;">
-            <span class="pill pill-red" style="font-size:10px;">🌡 6 heat signatures</span>
+            <span class="pill pill-red" style="font-size:10px;">ðŸŒ¡ 6 heat signatures</span>
             <span class="pill pill-blue" style="font-size:10px;">Grid 7-A</span>
           </div>
         </div>
@@ -1351,12 +1351,12 @@
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:3px;">
             <span style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Zone
-              Beta — Hospital</span>
+              Beta â€” Hospital</span>
             <span class="pill pill-amber" style="font-size:10px;flex-shrink:0;">High</span>
           </div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Partial access · 7 survivors</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Partial access Â· 7 survivors</div>
           <div style="display:flex;gap:5px;">
-            <span class="pill pill-amber" style="font-size:10px;">🔊 Tapping detected</span>
+            <span class="pill pill-amber" style="font-size:10px;">ðŸ”Š Tapping detected</span>
           </div>
         </div>
       </div>
@@ -1365,24 +1365,24 @@
         <div class="pnum" style="background:rgba(255,255,255,0.05);color:var(--text2);">3</div>
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:3px;">
-            <span style="font-weight:600;font-size:13px;">Zone Gamma — Low Bridge</span>
+            <span style="font-weight:600;font-size:13px;">Zone Gamma â€” Low Bridge</span>
             <span class="pill pill-neutral" style="font-size:10px;flex-shrink:0;">Medium</span>
           </div>
-          <div style="font-size:12px;color:var(--text2);">Flood rising · 40 displaced</div>
+          <div style="font-size:12px;color:var(--text2);">Flood rising Â· 40 displaced</div>
         </div>
       </div>
 
       <!-- Dispatch -->
       <div style="padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;">
         <div class="label" style="margin-bottom:10px;">Quick Dispatch</div>
-        <button class="dbtn" onclick="dispatch(this)"><span class="dbtn-icon">🚁</span><span>Deploy Medevac → Zone
+        <button class="dbtn" onclick="dispatch(this)"><span class="dbtn-icon">ðŸš</span><span>Deploy Medevac â†’ Zone
             Alpha</span></button>
-        <button class="dbtn" onclick="dispatch(this)"><span class="dbtn-icon">🚒</span><span>Send Rescue Team → Zone
+        <button class="dbtn" onclick="dispatch(this)"><span class="dbtn-icon">ðŸš’</span><span>Send Rescue Team â†’ Zone
             Beta</span></button>
-        <button class="dbtn" onclick="dispatch(this)"><span class="dbtn-icon">🛸</span><span>Launch Reserve Drone
+        <button class="dbtn" onclick="dispatch(this)"><span class="dbtn-icon">ðŸ›¸</span><span>Launch Reserve Drone
             (FOXTROT-5)</span></button>
         <button class="dbtn" onclick="dispatch(this)" style="margin-bottom:0;"><span
-            class="dbtn-icon">📡</span><span>Broadcast Emergency Alert</span></button>
+            class="dbtn-icon">ðŸ“¡</span><span>Broadcast Emergency Alert</span></button>
       </div>
 
       <!-- AI Intel Feed -->
@@ -1418,7 +1418,7 @@
               <span class="mono" style="font-size:10px;color:var(--text3);">04:22:51</span>
             </div>
             <p style="font-size:12px;line-height:1.5;color:var(--text2);"><strong style="color:#EE8080;">6 heat
-                signatures</strong> detected — basement, Zone Alpha Block 7. Mean temperature 36.8°C.</p>
+                signatures</strong> detected â€” basement, Zone Alpha Block 7. Mean temperature 36.8Â\u00B0C.</p>
           </div>
         </div>
 
@@ -1430,7 +1430,7 @@
               <span class="mono" style="font-size:10px;color:var(--text3);">04:22:33</span>
             </div>
             <p style="font-size:12px;line-height:1.5;color:var(--text2);">Team Bravo confirmed <strong
-                style="color:#6ED4A0;">8 survivors extracted</strong> — Grid 14-F. Medical evacuation en route.</p>
+                style="color:#6ED4A0;">8 survivors extracted</strong> â€” Grid 14-F. Medical evacuation en route.</p>
           </div>
         </div>
 
@@ -1441,8 +1441,8 @@
               <span class="pill pill-amber" style="font-size:10px;">Audio AI</span>
               <span class="mono" style="font-size:10px;color:var(--text3);">04:22:18</span>
             </div>
-            <p style="font-size:12px;line-height:1.5;color:var(--text2);">Rhythmic tapping at 1.2 Hz — Hospital Wing B.
-              Estimated <strong style="color:#DBA55A;">3–5 persons</strong> trapped.</p>
+            <p style="font-size:12px;line-height:1.5;color:var(--text2);">Rhythmic tapping at 1.2 Hz â€” Hospital Wing B.
+              Estimated <strong style="color:#DBA55A;">3â€“5 persons</strong> trapped.</p>
           </div>
         </div>
 
@@ -1454,7 +1454,7 @@
               <span class="mono" style="font-size:10px;color:var(--text3);">04:21:55</span>
             </div>
             <p style="font-size:12px;line-height:1.5;color:var(--text2);">M4.8 aftershock predicted in <strong
-                style="color:#80B0DC;">8–14 minutes</strong>. Confidence 71%. Ground teams notified.</p>
+                style="color:#80B0DC;">8â€“14 minutes</strong>. Confidence 71%. Ground teams notified.</p>
           </div>
         </div>
 
@@ -1466,7 +1466,7 @@
               <span class="mono" style="font-size:10px;color:var(--text3);">04:21:30</span>
             </div>
             <p style="font-size:12px;line-height:1.5;color:var(--text2);">Eastern sector rising at 0.4 m/hr. Zone Gamma
-              inundation projected in <strong style="color:#80B0DC;">≈ 90 min</strong>.</p>
+              inundation projected in <strong style="color:#80B0DC;">â‰ˆ 90 min</strong>.</p>
           </div>
         </div>
       </div>
@@ -1479,7 +1479,7 @@
         <div class="sens-row">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
             <span style="font-size:12px;color:var(--text2);">Air Quality (AQI)</span>
-            <span class="pill pill-red" style="font-size:10px;">347 — Hazardous</span>
+            <span class="pill pill-red" style="font-size:10px;">347 â€” Hazardous</span>
           </div>
           <div class="bar-track">
             <div class="bar-fill" style="width:69%;background:var(--red);opacity:.7;"></div>
@@ -1488,7 +1488,7 @@
         <div class="sens-row">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
             <span style="font-size:12px;color:var(--text2);">Flood Water Level</span>
-            <span class="pill pill-red" style="font-size:10px;">+3.8 m — Critical</span>
+            <span class="pill pill-red" style="font-size:10px;">+3.8 m â€” Critical</span>
           </div>
           <div class="bar-track">
             <div class="bar-fill" style="width:82%;background:var(--red);opacity:.7;"></div>
@@ -1517,8 +1517,8 @@
     </aside>
   </div>
 
-  <!-- ══════════════════════ LIVE DRONE FEED MODAL ══════════════════════ -->
-  <!-- ══════════════════════ PROBABILITY MODAL STYLES ══════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• LIVE DRONE FEED MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• PROBABILITY MODAL STYLES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <style>
     .prob-modal-overlay {
       position: fixed;
@@ -1732,16 +1732,16 @@
     }
   </style>
 
-  <!-- ══════════════════════ PROBABILITY MODAL HTML ══════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• PROBABILITY MODAL HTML â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="prob-modal-overlay" id="probModal" onclick="if(event.target===this)closeProbModal()">
     <div class="prob-modal">
       <div class="prob-header">
         <div
           style="width:36px;height:36px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">
-          🔮</div>
+          ðŸ”®</div>
         <div style="flex:1;">
           <div style="font-size:14px;font-weight:700;line-height:1.2;">Disaster Probability Analyser</div>
-          <div style="font-size:11px;color:var(--text2);">AI model trained on 50+ years of regional disaster history ·
+          <div style="font-size:11px;color:var(--text2);">AI model trained on 50+ years of regional disaster history Â·
             Bayesian + ML ensemble</div>
         </div>
         <span style="font-size:12px;color:var(--text2);">Region:</span>
@@ -1765,7 +1765,7 @@
           Model v3.2</span>
         <button onclick="closeProbModal()"
           style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;padding:5px 10px;font-size:13px;font-family:'DM Sans',sans-serif;transition:all .15s;"
-          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">✕ Close</button>
+          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">âœ• Close</button>
       </div>
 
       <div class="prob-body">
@@ -1773,37 +1773,37 @@
         <div class="prob-sidebar">
           <div class="label" style="margin-bottom:10px;">Select Disaster Type</div>
           <button class="dtype-btn active" onclick="selectDisaster('earthquake',this)"><span
-              style="font-size:16px;">🌍</span>
+              style="font-size:16px;">ðŸŒ</span>
             <div>
               <div style="font-weight:600;">Earthquake</div>
-              <div style="font-size:10px;color:var(--text3);">Seismic · Aftershock</div>
+              <div style="font-size:10px;color:var(--text3);">Seismic Â· Aftershock</div>
             </div><span id="eq-pill" class="pill pill-red" style="margin-left:auto;font-size:10px;">87%</span>
           </button>
-          <button class="dtype-btn" onclick="selectDisaster('flood',this)"><span style="font-size:16px;">🌊</span>
+          <button class="dtype-btn" onclick="selectDisaster('flood',this)"><span style="font-size:16px;">ðŸŒŠ</span>
             <div>
               <div style="font-weight:600;">Flood</div>
-              <div style="font-size:10px;color:var(--text3);">Flash · River · Coastal</div>
+              <div style="font-size:10px;color:var(--text3);">Flash Â· River Â· Coastal</div>
             </div><span id="fl-pill" class="pill pill-red" style="margin-left:auto;font-size:10px;">91%</span>
           </button>
-          <button class="dtype-btn" onclick="selectDisaster('cyclone',this)"><span style="font-size:16px;">🌀</span>
+          <button class="dtype-btn" onclick="selectDisaster('cyclone',this)"><span style="font-size:16px;">ðŸŒ€</span>
             <div>
               <div style="font-weight:600;">Cyclone</div>
-              <div style="font-size:10px;color:var(--text3);">Tropical storm · Surge</div>
+              <div style="font-size:10px;color:var(--text3);">Tropical storm Â· Surge</div>
             </div><span id="cy-pill" class="pill pill-amber" style="margin-left:auto;font-size:10px;">73%</span>
           </button>
-          <button class="dtype-btn" onclick="selectDisaster('landslide',this)"><span style="font-size:16px;">⛰️</span>
+          <button class="dtype-btn" onclick="selectDisaster('landslide',this)"><span style="font-size:16px;">â›\u00B0ï¸</span>
             <div>
               <div style="font-weight:600;">Landslide</div>
-              <div style="font-size:10px;color:var(--text3);">Debris · Mudflow</div>
+              <div style="font-size:10px;color:var(--text3);">Debris Â· Mudflow</div>
             </div><span id="ls-pill" class="pill pill-amber" style="margin-left:auto;font-size:10px;">62%</span>
           </button>
-          <button class="dtype-btn" onclick="selectDisaster('drought',this)"><span style="font-size:16px;">☀️</span>
+          <button class="dtype-btn" onclick="selectDisaster('drought',this)"><span style="font-size:16px;">â˜€ï¸</span>
             <div>
               <div style="font-weight:600;">Drought</div>
-              <div style="font-size:10px;color:var(--text3);">Crop · Water scarcity</div>
+              <div style="font-size:10px;color:var(--text3);">Crop Â· Water scarcity</div>
             </div><span id="dr-pill" class="pill pill-neutral" style="margin-left:auto;font-size:10px;">18%</span>
           </button>
-          <button class="dtype-btn" onclick="selectDisaster('heatwave',this)"><span style="font-size:16px;">🌡️</span>
+          <button class="dtype-btn" onclick="selectDisaster('heatwave',this)"><span style="font-size:16px;">ðŸŒ¡ï¸</span>
             <div>
               <div style="font-weight:600;">Heat Wave</div>
               <div style="font-size:10px;color:var(--text3);">Extreme temperature</div>
@@ -1821,7 +1821,7 @@
           </div>
           <div style="margin-bottom:14px;">
             <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span
-                style="color:var(--text2);">Seismic Index (0–10)</span><span class="mono" style="color:#80B0DC;"
+                style="color:var(--text2);">Seismic Index (0â€“10)</span><span class="mono" style="color:#80B0DC;"
                 id="seis-val">7.4</span></div>
             <input type="range" min="0" max="100" value="74" id="seis-slider"
               oninput="document.getElementById('seis-val').textContent=(this.value/10).toFixed(1);updateProbabilities()" />
@@ -1843,7 +1843,7 @@
           <button onclick="updateProbabilities()"
             style="width:100%;padding:10px;border-radius:7px;border:none;background:rgba(99,102,241,0.8);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:4px;"
             onmouseover="this.style.background='rgba(99,102,241,1)'"
-            onmouseout="this.style.background='rgba(99,102,241,0.8)'">🔄 Re-run Analysis</button>
+            onmouseout="this.style.background='rgba(99,102,241,0.8)'">ðŸ”„ Re-run Analysis</button>
         </div>
 
         <!-- Right: main panel -->
@@ -1852,7 +1852,7 @@
     </div>
   </div>
 
-  <!-- ═══ FEED MODAL ═══ -->
+  <!-- â•â•â• FEED MODAL â•â•â• -->
   <div class="feed-modal-overlay" id="feedModal" onclick="handleOverlayClick(event)">
     <div class="feed-modal" onclick="event.stopPropagation()">
 
@@ -1872,10 +1872,10 @@
           <span style="font-size:12px;color:var(--text2);">Viewing:</span>
           <select id="droneSelect" onchange="switchDrone(this.value)"
             style="background:var(--surface3);border:1px solid var(--border2);border-radius:5px;padding:5px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;cursor:pointer;">
-            <option value="ALPHA-1">ALPHA-1 — Zone A</option>
-            <option value="BRAVO-2">BRAVO-2 — Zone B</option>
-            <option value="ECHO-3">ECHO-3 — Returning</option>
-            <option value="DELTA-4">DELTA-4 — Zone D</option>
+            <option value="ALPHA-1">ALPHA-1 â€” Zone A</option>
+            <option value="BRAVO-2">BRAVO-2 â€” Zone B</option>
+            <option value="ECHO-3">ECHO-3 â€” Returning</option>
+            <option value="DELTA-4">DELTA-4 â€” Zone D</option>
             <option value="custom">+ Connect Your Drone</option>
           </select>
         </div>
@@ -1887,18 +1887,18 @@
         </div>
         <button onclick="closeFeedModal()"
           style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;padding:5px 10px;font-size:13px;margin-left:8px;font-family:'DM Sans',sans-serif;transition:all .15s;"
-          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">✕ Close</button>
+          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">âœ• Close</button>
       </div>
 
       <!-- Feed Tabs -->
       <div class="feed-tabs">
-        <button class="feed-tab active" onclick="switchFeedTab('video', this)">📹 Live Video</button>
-        <button class="feed-tab" onclick="switchFeedTab('gps', this)">🛰 GPS Tracking</button>
-        <button class="feed-tab" onclick="switchFeedTab('telemetry', this)">📊 Telemetry</button>
-        <button class="feed-tab" onclick="switchFeedTab('connect', this)">🔌 Connect Drone</button>
+        <button class="feed-tab active" onclick="switchFeedTab('video', this)">ðŸ“¹ Live Video</button>
+        <button class="feed-tab" onclick="switchFeedTab('gps', this)">ðŸ›\u00B0 GPS Tracking</button>
+        <button class="feed-tab" onclick="switchFeedTab('telemetry', this)">ðŸ“Š Telemetry</button>
+        <button class="feed-tab" onclick="switchFeedTab('connect', this)">ðŸ”Œ Connect Drone</button>
       </div>
 
-      <!-- ── TAB: VIDEO ── -->
+      <!-- â”€â”€ TAB: VIDEO â”€â”€ -->
       <div id="tab-video" class="feed-modal-body">
 
         <!-- Left: video pane -->
@@ -1931,17 +1931,17 @@
             <div id="hud-mode">MODE: AUTO</div>
           </div>
           <div class="hud-label" style="top:16px;right:20px;text-align:right;">
-            <div id="hud-lat">LAT: 24.8360°N</div>
-            <div id="hud-lon">LON: 91.9170°E</div>
+            <div id="hud-lat">LAT: 24.8360Â\u00B0N</div>
+            <div id="hud-lon">LON: 91.9170Â\u00B0E</div>
             <div id="hud-alt">ALT: 120 m AGL</div>
           </div>
           <div class="hud-label" style="bottom:16px;left:20px;">
             <div id="hud-spd">SPEED: 8.4 m/s</div>
-            <div id="hud-hdg">HEADING: 214°</div>
+            <div id="hud-hdg">HEADING: 214Â\u00B0</div>
           </div>
           <div class="hud-label" style="bottom:16px;right:20px;text-align:right;">
             <div id="hud-bat">BAT: 87%</div>
-            <div id="hud-sig">SIGNAL: −62 dBm</div>
+            <div id="hud-sig">SIGNAL: âˆ’62 dBm</div>
             <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;">
               <span class="rec-dot"></span><span id="hud-rec">REC 00:04:23</span>
             </div>
@@ -1955,7 +1955,7 @@
           <!-- No signal overlay (hidden by default) -->
           <div id="noSignalOverlay"
             style="display:none;position:absolute;inset:0;background:rgba(4,6,8,0.9);z-index:10;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
-            <div style="font-size:32px;opacity:.4;">📡</div>
+            <div style="font-size:32px;opacity:.4;">ðŸ“¡</div>
             <div style="font-size:14px;font-weight:600;color:var(--text2);">No Signal</div>
             <div style="font-size:12px;color:var(--text3);">Connect a drone to begin streaming</div>
           </div>
@@ -1969,11 +1969,11 @@
             <div class="label" style="margin-bottom:10px;">Quick Telemetry</div>
             <div class="telem-row">
               <span class="telem-key">Latitude</span>
-              <span class="telem-val" id="tv-lat" style="color:#80B0DC;">24.8360°N</span>
+              <span class="telem-val" id="tv-lat" style="color:#80B0DC;">24.8360Â\u00B0N</span>
             </div>
             <div class="telem-row">
               <span class="telem-key">Longitude</span>
-              <span class="telem-val" id="tv-lon" style="color:#80B0DC;">91.9170°E</span>
+              <span class="telem-val" id="tv-lon" style="color:#80B0DC;">91.9170Â\u00B0E</span>
             </div>
             <div class="telem-row">
               <span class="telem-key">Altitude</span>
@@ -1985,7 +1985,7 @@
             </div>
             <div class="telem-row">
               <span class="telem-key">Heading</span>
-              <span class="telem-val" id="tv-hdg">214°</span>
+              <span class="telem-val" id="tv-hdg">214Â\u00B0</span>
             </div>
             <div class="telem-row">
               <span class="telem-key">Battery</span>
@@ -1993,7 +1993,7 @@
             </div>
             <div class="telem-row">
               <span class="telem-key">Signal</span>
-              <span class="telem-val" id="tv-sig" style="color:#6ED4A0;">−62 dBm</span>
+              <span class="telem-val" id="tv-sig" style="color:#6ED4A0;">âˆ’62 dBm</span>
             </div>
             <div class="telem-row" style="border-bottom:none;">
               <span class="telem-key">Flight Time</span>
@@ -2021,10 +2021,10 @@
               </button>
               <button onclick="captureSnapshot()"
                 style="flex:1;padding:8px;border-radius:5px;background:var(--surface3);border:1px solid var(--border2);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;"
-                onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">📸
+                onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">ðŸ“¸
                 Snapshot</button>
             </div>
-            <div id="snapMsg" style="font-size:11px;color:#6ED4A0;display:none;text-align:center;">✓ Snapshot saved to
+            <div id="snapMsg" style="font-size:11px;color:#6ED4A0;display:none;text-align:center;">âœ“ Snapshot saved to
               incident log</div>
 
             <!-- Altitude graph label -->
@@ -2034,7 +2034,7 @@
         </div>
       </div>
 
-      <!-- ── TAB: GPS ── (hidden by default) -->
+      <!-- â”€â”€ TAB: GPS â”€â”€ (hidden by default) -->
       <div id="tab-gps" style="display:none;flex:1;position:relative;overflow:hidden;background:#070D1A;">
         <div
           style="position:absolute;inset:0;background-image:linear-gradient(rgba(74,143,212,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(74,143,212,0.05) 1px,transparent 1px);background-size:28px 28px;">
@@ -2046,13 +2046,13 @@
           style="position:absolute;top:16px;left:16px;background:rgba(7,13,26,0.88);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;backdrop-filter:blur(6px);min-width:200px;">
           <div class="label" style="margin-bottom:10px;">Live GPS</div>
           <div class="telem-row"><span class="telem-key">Latitude</span><span class="telem-val" id="gps-lat"
-              style="color:#80B0DC;">24.8360°N</span></div>
+              style="color:#80B0DC;">24.8360Â\u00B0N</span></div>
           <div class="telem-row"><span class="telem-key">Longitude</span><span class="telem-val" id="gps-lon"
-              style="color:#80B0DC;">91.9170°E</span></div>
+              style="color:#80B0DC;">91.9170Â\u00B0E</span></div>
           <div class="telem-row"><span class="telem-key">Altitude</span><span class="telem-val" id="gps-alt">120
               m</span></div>
           <div class="telem-row" style="border:none;"><span class="telem-key">Fix Type</span><span
-              class="pill pill-green" style="font-size:10px;">3D Fix · 14 sats</span></div>
+              class="pill pill-green" style="font-size:10px;">3D Fix Â· 14 sats</span></div>
         </div>
 
         <!-- Trail length legend -->
@@ -2079,7 +2079,7 @@
           Zone Gamma</div>
       </div>
 
-      <!-- ── TAB: TELEMETRY ── -->
+      <!-- â”€â”€ TAB: TELEMETRY â”€â”€ -->
       <div id="tab-telemetry" style="display:none;flex:1;overflow-y:auto;padding:20px;display:none;">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
           <!-- Stat boxes -->
@@ -2112,9 +2112,9 @@
           <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;">
             <div class="label" style="margin-bottom:12px;">Flight Parameters</div>
             <div class="telem-row"><span class="telem-key">Latitude</span><span class="telem-val" style="color:#80B0DC;"
-                id="full-lat">12.8231°N</span></div>
+                id="full-lat">12.8231Â\u00B0N</span></div>
             <div class="telem-row"><span class="telem-key">Longitude</span><span class="telem-val"
-                style="color:#80B0DC;" id="full-lon">80.0442°E</span></div>
+                style="color:#80B0DC;" id="full-lon">80.0442Â\u00B0E</span></div>
             <div class="telem-row"><span class="telem-key">Altitude (MSL)</span><span class="telem-val"
                 id="full-msl">142 m</span></div>
             <div class="telem-row"><span class="telem-key">Altitude (AGL)</span><span class="telem-val"
@@ -2124,27 +2124,27 @@
             <div class="telem-row"><span class="telem-key">Vertical Speed</span><span class="telem-val"
                 id="full-vspd">+0.2 m/s</span></div>
             <div class="telem-row"><span class="telem-key">Heading</span><span class="telem-val"
-                id="full-hdg">214°</span></div>
+                id="full-hdg">214Â\u00B0</span></div>
             <div class="telem-row"><span class="telem-key">Pitch</span><span class="telem-val"
-                id="full-pitch">−2.1°</span></div>
+                id="full-pitch">âˆ’2.1Â\u00B0</span></div>
             <div class="telem-row" style="border:none;"><span class="telem-key">Roll</span><span class="telem-val"
-                id="full-roll">+0.8°</span></div>
+                id="full-roll">+0.8Â\u00B0</span></div>
           </div>
           <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;">
             <div class="label" style="margin-bottom:12px;">System Status</div>
             <div class="telem-row"><span class="telem-key">Flight Mode</span><span class="telem-val">AUTO</span></div>
             <div class="telem-row"><span class="telem-key">GPS Fix</span><span class="pill pill-green"
-                style="font-size:10px;">3D · 14 Satellites</span></div>
+                style="font-size:10px;">3D Â· 14 Satellites</span></div>
             <div class="telem-row"><span class="telem-key">Signal Strength</span><span class="telem-val"
-                id="full-sig">−62 dBm</span></div>
+                id="full-sig">âˆ’62 dBm</span></div>
             <div class="telem-row"><span class="telem-key">Data Link</span><span class="pill pill-green"
-                style="font-size:10px;">4G LTE · 12 ms</span></div>
+                style="font-size:10px;">4G LTE Â· 12 ms</span></div>
             <div class="telem-row"><span class="telem-key">Battery Voltage</span><span class="telem-val"
                 id="full-volt">23.8 V</span></div>
             <div class="telem-row"><span class="telem-key">Motor Temp</span><span class="telem-val"
-                id="full-temp">42°C</span></div>
+                id="full-temp">42Â\u00B0C</span></div>
             <div class="telem-row"><span class="telem-key">Payload Camera</span><span class="pill pill-green"
-                style="font-size:10px;">Active · 4K 30fps</span></div>
+                style="font-size:10px;">Active Â· 4K 30fps</span></div>
             <div class="telem-row"><span class="telem-key">Thermal Sensor</span><span class="pill pill-green"
                 style="font-size:10px;">Active</span></div>
             <div class="telem-row" style="border:none;"><span class="telem-key">Flight Time</span><span
@@ -2153,7 +2153,7 @@
         </div>
       </div>
 
-      <!-- ── TAB: CONNECT ── -->
+      <!-- â”€â”€ TAB: CONNECT â”€â”€ -->
       <div id="tab-connect"
         style="display:none;flex:1;overflow-y:auto;padding:24px;align-items:flex-start;justify-content:center;">
         <div style="max-width:560px;margin:0 auto;">
@@ -2169,19 +2169,19 @@
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;" id="protoSelect">
               <div class="proto-opt active-proto" onclick="selectProto(this,'mavlink')"
                 style="background:rgba(74,143,212,0.12);border:1px solid var(--blue);border-radius:7px;padding:12px;cursor:pointer;text-align:center;transition:all .15s;">
-                <div style="font-size:18px;margin-bottom:4px;">🔗</div>
+                <div style="font-size:18px;margin-bottom:4px;">ðŸ”—</div>
                 <div style="font-size:12px;font-weight:600;">MAVLink</div>
                 <div style="font-size:10px;color:var(--text2);">ArduPilot / PX4</div>
               </div>
               <div class="proto-opt" onclick="selectProto(this,'dji')"
                 style="background:var(--surface3);border:1px solid var(--border);border-radius:7px;padding:12px;cursor:pointer;text-align:center;transition:all .15s;">
-                <div style="font-size:18px;margin-bottom:4px;">✈️</div>
+                <div style="font-size:18px;margin-bottom:4px;">âœˆï¸</div>
                 <div style="font-size:12px;font-weight:600;">DJI SDK</div>
                 <div style="font-size:10px;color:var(--text2);">DJI Drones</div>
               </div>
               <div class="proto-opt" onclick="selectProto(this,'rtsp')"
                 style="background:var(--surface3);border:1px solid var(--border);border-radius:7px;padding:12px;cursor:pointer;text-align:center;transition:all .15s;">
-                <div style="font-size:18px;margin-bottom:4px;">📹</div>
+                <div style="font-size:18px;margin-bottom:4px;">ðŸ“¹</div>
                 <div style="font-size:12px;font-weight:600;">RTSP / WebRTC</div>
                 <div style="font-size:10px;color:var(--text2);">Video stream only</div>
               </div>
@@ -2241,7 +2241,7 @@
                   <span class="dot dot-green"></span>
                   <div>
                     <div style="font-size:13px;font-weight:600;">ALPHA-1</div>
-                    <div class="mono" style="font-size:10px;color:var(--text2);">MAVLink · UDP · 192.168.4.21:14550
+                    <div class="mono" style="font-size:10px;color:var(--text2);">MAVLink Â· UDP Â· 192.168.4.21:14550
                     </div>
                   </div>
                 </div>
@@ -2257,7 +2257,7 @@
                   <span class="dot dot-green"></span>
                   <div>
                     <div style="font-size:13px;font-weight:600;">BRAVO-2</div>
-                    <div class="mono" style="font-size:10px;color:var(--text2);">MAVLink · UDP · 192.168.4.22:14550
+                    <div class="mono" style="font-size:10px;color:var(--text2);">MAVLink Â· UDP Â· 192.168.4.22:14550
                     </div>
                   </div>
                 </div>
@@ -2273,7 +2273,7 @@
                   <span class="dot dot-amber"></span>
                   <div>
                     <div style="font-size:13px;font-weight:600;">ECHO-3</div>
-                    <div class="mono" style="font-size:10px;color:var(--text2);">MAVLink · UDP · 192.168.4.23:14550
+                    <div class="mono" style="font-size:10px;color:var(--text2);">MAVLink Â· UDP Â· 192.168.4.23:14550
                     </div>
                   </div>
                 </div>
@@ -2290,12 +2290,13 @@
 
     </div>
   </div>
-  <!-- ══════════════════════ END MODAL ══════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• END MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 
   <script>
-    const BACKEND_URL = window.location.port === '3000' ? '' : 'http://localhost:3000';
+    const BACKEND_URL = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+    console.log('[AEGIS] Script Init. Backend:', BACKEND_URL || 'Local');
 
-    // ── Clock ──
+    // â”€â”€ Clock â”€â”€
     let s = 4 * 3600 + 23 * 17;
     setInterval(() => {
       s++;
@@ -2304,16 +2305,16 @@
           .map(n => String(n).padStart(2, '0')).join(':');
     }, 1000);
 
-    // ── Dispatch ──
+    // â”€â”€ Dispatch â”€â”€
     function dispatch(btn) {
       if (btn.classList.contains('dispatched')) return;
       const orig = btn.innerHTML;
       btn.classList.add('dispatched');
-      btn.innerHTML = '<span class="dbtn-icon">✓</span><span>Dispatched successfully</span>';
+      btn.innerHTML = '<span class="dbtn-icon">âœ“</span><span>Dispatched successfully</span>';
       setTimeout(() => { btn.classList.remove('dispatched'); btn.innerHTML = orig; }, 4000);
     }
 
-    // ── Tabs (map) ──
+    // â”€â”€ Tabs (map) â”€â”€
     document.querySelectorAll('.tab').forEach(t => {
       t.addEventListener('click', () => {
         t.closest('.tab-bar').querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -2321,7 +2322,7 @@
       });
     });
 
-    // ── Nav ──
+    // â”€â”€ Nav â”€â”€
     document.querySelectorAll('.nav-item').forEach(b => {
       b.addEventListener('click', () => {
         document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
@@ -2329,12 +2330,12 @@
       });
     });
 
-    // ── Alert dismiss ──
+    // â”€â”€ Alert dismiss â”€â”€
     document.querySelector('.alert-strip span:last-child').addEventListener('click', function () {
       this.closest('.alert-strip').style.display = 'none';
     });
 
-    // ════════════════════ PROBABILITY ANALYSER ════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• PROBABILITY ANALYSER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     function openProbModal() {
       document.getElementById('probModal').classList.add('open');
@@ -2349,7 +2350,7 @@
     // Historical data: [year, occurred(1/0), magnitude/severity]
     const historicalData = {
       earthquake: {
-        label: 'Earthquake', icon: '🌍',
+        label: 'Earthquake', icon: 'ðŸŒ',
         events: [
           { year: 1918, mag: 7.6, desc: 'Srimangal earthquake, massive casualties' },
           { year: 1930, mag: 7.1, desc: 'Dhubri earthquake, Sylhet heavily affected' },
@@ -2359,15 +2360,15 @@
           { year: 2003, mag: 5.8, desc: 'Barkal-Rangamati earthquake' },
           { year: 2016, mag: 6.9, desc: 'India-Bangladesh border earthquake, tremors in Sylhet' },
           { year: 2023, mag: 5.5, desc: 'Sylhet aftershock sequence' },
-          { year: 2025, mag: 7.4, desc: 'Current event — active response' }
+          { year: 2025, mag: 7.4, desc: 'Current event â€” active response' }
         ],
         baseProb: { '24h': 0.87, '7d': 0.89, '30d': 0.72, '90d': 0.65 },
         factors: [
-          { icon: '📐', name: 'Tectonic plate boundary proximity', weight: 0.35, impact: 'high' },
-          { icon: '🌊', name: 'Soil liquefaction risk', weight: 0.22, impact: 'high' },
-          { icon: '🏗️', name: 'Building infrastructure age', weight: 0.18, impact: 'med' },
-          { icon: '📅', name: 'Historical recurrence interval', weight: 0.15, impact: 'med' },
-          { icon: '🌧️', name: 'Recent rainfall (weakens soil)', weight: 0.10, impact: 'low' },
+          { icon: 'ðŸ“', name: 'Tectonic plate boundary proximity', weight: 0.35, impact: 'high' },
+          { icon: 'ðŸŒŠ', name: 'Soil liquefaction risk', weight: 0.22, impact: 'high' },
+          { icon: 'ðŸ—ï¸', name: 'Building infrastructure age', weight: 0.18, impact: 'med' },
+          { icon: 'ðŸ“…', name: 'Historical recurrence interval', weight: 0.15, impact: 'med' },
+          { icon: 'ðŸŒ§ï¸', name: 'Recent rainfall (weakens soil)', weight: 0.10, impact: 'low' },
         ],
         monthlyFreq: [0.5, 0.4, 0.6, 0.7, 0.8, 0.6, 0.5, 0.7, 0.9, 1.0, 0.8, 0.6],
         yearlyCount: [0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1],
@@ -2379,25 +2380,25 @@
         ]
       },
       flood: {
-        label: 'Flood', icon: '🌊',
+        label: 'Flood', icon: 'ðŸŒŠ',
         events: [
           { year: 1974, mag: 9.2, desc: 'Great Bangladesh flood, 30,000 deaths' },
           { year: 1987, mag: 8.8, desc: 'Bangladesh flood, 24 million displaced' },
-          { year: 1988, mag: 9.5, desc: 'Worst flood of 20th century — 75% country inundated' },
+          { year: 1988, mag: 9.5, desc: 'Worst flood of 20th century â€” 75% country inundated' },
           { year: 1998, mag: 9.8, desc: 'Catastrophic flood, 30M displaced, 918 deaths' },
           { year: 2004, mag: 8.4, desc: 'Major flood, 36M affected in Bangladesh' },
           { year: 2007, mag: 8.9, desc: 'Cyclone Sidr compound flooding' },
-          { year: 2017, mag: 8.0, desc: 'Sylhet flash flood — 7.2M affected' },
+          { year: 2017, mag: 8.0, desc: 'Sylhet flash flood â€” 7.2M affected' },
           { year: 2019, mag: 7.5, desc: 'Brahmaputra river flood' },
           { year: 2022, mag: 9.1, desc: 'Worst Sylhet flood in 122 years' },
         ],
         baseProb: { '24h': 0.91, '7d': 0.94, '30d': 0.88, '90d': 0.80 },
         factors: [
-          { icon: '🌧️', name: 'Current rainfall intensity', weight: 0.40, impact: 'high' },
-          { icon: '🌊', name: 'River basin water level', weight: 0.30, impact: 'high' },
-          { icon: '🏔️', name: 'Upstream snowmelt (Brahmaputra)', weight: 0.15, impact: 'med' },
-          { icon: '🌀', name: 'Cyclone VEERA approach', weight: 0.10, impact: 'high' },
-          { icon: '🌱', name: 'Soil saturation index', weight: 0.05, impact: 'med' },
+          { icon: 'ðŸŒ§ï¸', name: 'Current rainfall intensity', weight: 0.40, impact: 'high' },
+          { icon: 'ðŸŒŠ', name: 'River basin water level', weight: 0.30, impact: 'high' },
+          { icon: 'ðŸ”ï¸', name: 'Upstream snowmelt (Brahmaputra)', weight: 0.15, impact: 'med' },
+          { icon: 'ðŸŒ€', name: 'Cyclone VEERA approach', weight: 0.10, impact: 'high' },
+          { icon: 'ðŸŒ±', name: 'Soil saturation index', weight: 0.05, impact: 'med' },
         ],
         monthlyFreq: [0.2, 0.2, 0.3, 0.5, 0.8, 1.0, 1.0, 0.9, 0.7, 0.4, 0.2, 0.1],
         yearlyCount: [1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1],
@@ -2409,24 +2410,24 @@
         ]
       },
       cyclone: {
-        label: 'Cyclone', icon: '🌀',
+        label: 'Cyclone', icon: 'ðŸŒ€',
         events: [
-          { year: 1970, mag: 10.0, desc: 'Bhola cyclone — deadliest in recorded history, 500,000 deaths' },
-          { year: 1991, mag: 9.5, desc: 'Bangladesh cyclone — 138,000 deaths' },
+          { year: 1970, mag: 10.0, desc: 'Bhola cyclone â€” deadliest in recorded history, 500,000 deaths' },
+          { year: 1991, mag: 9.5, desc: 'Bangladesh cyclone â€” 138,000 deaths' },
           { year: 1994, mag: 7.8, desc: 'Cyclone in Cox\'s Bazar' },
-          { year: 1997, mag: 8.2, desc: 'Bangladesh cyclone — 117km/h winds' },
-          { year: 2007, mag: 9.0, desc: 'Cyclone Sidr — 3,447 deaths' },
-          { year: 2009, mag: 7.5, desc: 'Cyclone Aila — 190 deaths' },
-          { year: 2020, mag: 8.8, desc: 'Cyclone Amphan — $13B damage' },
-          { year: 2023, mag: 7.9, desc: 'Cyclone Mocha — landfall near Cox\'s Bazar' },
+          { year: 1997, mag: 8.2, desc: 'Bangladesh cyclone â€” 117km/h winds' },
+          { year: 2007, mag: 9.0, desc: 'Cyclone Sidr â€” 3,447 deaths' },
+          { year: 2009, mag: 7.5, desc: 'Cyclone Aila â€” 190 deaths' },
+          { year: 2020, mag: 8.8, desc: 'Cyclone Amphan â€” $13B damage' },
+          { year: 2023, mag: 7.9, desc: 'Cyclone Mocha â€” landfall near Cox\'s Bazar' },
         ],
         baseProb: { '24h': 0.73, '7d': 0.78, '30d': 0.55, '90d': 0.40 },
         factors: [
-          { icon: '🌡️', name: 'Bay of Bengal SST > 28°C', weight: 0.35, impact: 'high' },
-          { icon: '💨', name: 'Wind shear pattern', weight: 0.25, impact: 'high' },
-          { icon: '📅', name: 'Peak cyclone season (May–Nov)', weight: 0.20, impact: 'med' },
-          { icon: '🌊', name: 'Storm surge risk (low elevation)', weight: 0.12, impact: 'high' },
-          { icon: '🛰️', name: 'Satellite cyclone track model', weight: 0.08, impact: 'med' },
+          { icon: 'ðŸŒ¡ï¸', name: 'Bay of Bengal SST > 28Â\u00B0C', weight: 0.35, impact: 'high' },
+          { icon: 'ðŸ’¨', name: 'Wind shear pattern', weight: 0.25, impact: 'high' },
+          { icon: 'ðŸ“…', name: 'Peak cyclone season (Mayâ€“Nov)', weight: 0.20, impact: 'med' },
+          { icon: 'ðŸŒŠ', name: 'Storm surge risk (low elevation)', weight: 0.12, impact: 'high' },
+          { icon: 'ðŸ›\u00B0ï¸', name: 'Satellite cyclone track model', weight: 0.08, impact: 'med' },
         ],
         monthlyFreq: [0.1, 0.1, 0.2, 0.4, 0.9, 0.7, 0.6, 0.7, 0.8, 0.9, 0.7, 0.2],
         yearlyCount: [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0],
@@ -2438,22 +2439,22 @@
         ]
       },
       landslide: {
-        label: 'Landslide', icon: '⛰️',
+        label: 'Landslide', icon: 'â›\u00B0ï¸',
         events: [
-          { year: 2007, mag: 8.0, desc: 'Chittagong landslides — 128 deaths' },
+          { year: 2007, mag: 8.0, desc: 'Chittagong landslides â€” 128 deaths' },
           { year: 2010, mag: 7.2, desc: 'Cox\'s Bazar landslide, monsoon-triggered' },
           { year: 2012, mag: 6.8, desc: 'Rangamati landslide, 90 affected' },
           { year: 2015, mag: 7.5, desc: 'Multiple landslides, hill districts' },
-          { year: 2017, mag: 9.0, desc: 'Sylhet-Rangamati landslides — 156 deaths' },
+          { year: 2017, mag: 9.0, desc: 'Sylhet-Rangamati landslides â€” 156 deaths' },
           { year: 2021, mag: 7.8, desc: 'Sylhet hill area landslide, earthquake-triggered' },
         ],
         baseProb: { '24h': 0.62, '7d': 0.70, '30d': 0.55, '90d': 0.40 },
         factors: [
-          { icon: '🌧️', name: 'Heavy antecedent rainfall', weight: 0.45, impact: 'high' },
-          { icon: '🌍', name: 'Post-earthquake slope instability', weight: 0.30, impact: 'high' },
-          { icon: '⛏️', name: 'Deforestation in hill tracts', weight: 0.12, impact: 'med' },
-          { icon: '🏔️', name: 'Hill gradient > 30°', weight: 0.08, impact: 'med' },
-          { icon: '🌱', name: 'Root cohesion loss', weight: 0.05, impact: 'low' },
+          { icon: 'ðŸŒ§ï¸', name: 'Heavy antecedent rainfall', weight: 0.45, impact: 'high' },
+          { icon: 'ðŸŒ', name: 'Post-earthquake slope instability', weight: 0.30, impact: 'high' },
+          { icon: 'â›ï¸', name: 'Deforestation in hill tracts', weight: 0.12, impact: 'med' },
+          { icon: 'ðŸ”ï¸', name: 'Hill gradient > 30Â\u00B0', weight: 0.08, impact: 'med' },
+          { icon: 'ðŸŒ±', name: 'Root cohesion loss', weight: 0.05, impact: 'low' },
         ],
         monthlyFreq: [0.1, 0.1, 0.2, 0.3, 0.7, 1.0, 1.0, 0.9, 0.6, 0.3, 0.1, 0.1],
         yearlyCount: [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0],
@@ -2465,7 +2466,7 @@
         ]
       },
       drought: {
-        label: 'Drought', icon: '☀️',
+        label: 'Drought', icon: 'â˜€ï¸',
         events: [
           { year: 1979, mag: 7.0, desc: 'Severe drought, crop failures in northern Bangladesh' },
           { year: 1994, mag: 6.5, desc: 'Drought affected 14 northern districts' },
@@ -2474,33 +2475,33 @@
         ],
         baseProb: { '24h': 0.18, '7d': 0.20, '30d': 0.22, '90d': 0.30 },
         factors: [
-          { icon: '🌧️', name: 'Rainfall deficit (currently above avg)', weight: 0.50, impact: 'low' },
-          { icon: '🌡️', name: 'Temperature anomaly', weight: 0.25, impact: 'low' },
-          { icon: '🌊', name: 'Groundwater depletion', weight: 0.15, impact: 'med' },
-          { icon: '💨', name: 'La Niña / El Niño pattern', weight: 0.10, impact: 'low' },
+          { icon: 'ðŸŒ§ï¸', name: 'Rainfall deficit (currently above avg)', weight: 0.50, impact: 'low' },
+          { icon: 'ðŸŒ¡ï¸', name: 'Temperature anomaly', weight: 0.25, impact: 'low' },
+          { icon: 'ðŸŒŠ', name: 'Groundwater depletion', weight: 0.15, impact: 'med' },
+          { icon: 'ðŸ’¨', name: 'La NiÃ±a / El NiÃ±o pattern', weight: 0.10, impact: 'low' },
         ],
         monthlyFreq: [0.4, 0.5, 0.6, 0.5, 0.3, 0.1, 0.1, 0.1, 0.2, 0.3, 0.4, 0.5],
         yearlyCount: [0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
         recommendations: [
-          'Current flooding negates drought risk — reassess post-event.',
+          'Current flooding negates drought risk â€” reassess post-event.',
           'Monitor groundwater levels after flood waters recede.',
           'Plan crop recovery strategy with agriculture ministry.',
         ]
       },
       heatwave: {
-        label: 'Heat Wave', icon: '🌡️',
+        label: 'Heat Wave', icon: 'ðŸŒ¡ï¸',
         events: [
           { year: 1995, mag: 7.5, desc: 'Severe heat wave, 800 deaths across Bangladesh' },
-          { year: 2010, mag: 8.0, desc: 'Pre-monsoon extreme heat, 40°C+ in Rajshahi' },
+          { year: 2010, mag: 8.0, desc: 'Pre-monsoon extreme heat, 40Â\u00B0C+ in Rajshahi' },
           { year: 2014, mag: 7.2, desc: 'April heat wave across south Asia' },
-          { year: 2023, mag: 8.5, desc: 'Record 43.8°C in Chuadanga district' },
+          { year: 2023, mag: 8.5, desc: 'Record 43.8Â\u00B0C in Chuadanga district' },
         ],
         baseProb: { '24h': 0.22, '7d': 0.25, '30d': 0.30, '90d': 0.35 },
         factors: [
-          { icon: '☁️', name: 'Cloud cover & humidity (high — reduces risk)', weight: 0.45, impact: 'low' },
-          { icon: '🌡️', name: 'Temperature forecast anomaly', weight: 0.30, impact: 'low' },
-          { icon: '💨', name: 'Bay wind pattern', weight: 0.15, impact: 'low' },
-          { icon: '📅', name: 'Season (March–May peak risk)', weight: 0.10, impact: 'med' },
+          { icon: 'â˜ï¸', name: 'Cloud cover & humidity (high â€” reduces risk)', weight: 0.45, impact: 'low' },
+          { icon: 'ðŸŒ¡ï¸', name: 'Temperature forecast anomaly', weight: 0.30, impact: 'low' },
+          { icon: 'ðŸ’¨', name: 'Bay wind pattern', weight: 0.15, impact: 'low' },
+          { icon: 'ðŸ“…', name: 'Season (Marchâ€“May peak risk)', weight: 0.10, impact: 'med' },
         ],
         monthlyFreq: [0.2, 0.3, 0.6, 0.9, 1.0, 0.4, 0.2, 0.2, 0.3, 0.4, 0.3, 0.2],
         yearlyCount: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
@@ -2658,10 +2659,10 @@
         </div>
         <div style="font-size:11px;color:var(--text2);margin-top:10px;">Probability for <strong style="color:var(--text);">${horizonLabels[horizon]}</strong></div>
         <div style="background:${risk.bg};border:1px solid ${risk.border};border-radius:6px;padding:8px;margin-top:12px;font-size:11px;color:${risk.color};line-height:1.5;">
-          ${pct >= 75 ? '⚠ Immediate action required. High likelihood of occurrence based on current sensor data and historical patterns.' :
-          pct >= 50 ? '⚡ Elevated risk. Monitor conditions closely and prepare response assets.' :
-            pct >= 25 ? '📊 Moderate risk. Standard watch protocols apply.' :
-              '✓ Low risk under current conditions. Continue normal monitoring.'}
+          ${pct >= 75 ? 'âš  Immediate action required. High likelihood of occurrence based on current sensor data and historical patterns.' :
+          pct >= 50 ? 'âš¡ Elevated risk. Monitor conditions closely and prepare response assets.' :
+            pct >= 25 ? 'ðŸ“Š Moderate risk. Standard watch protocols apply.' :
+              'âœ“ Low risk under current conditions. Continue normal monitoring.'}
         </div>
       </div>
 
@@ -2683,7 +2684,7 @@
 
       <!-- All Disaster Probabilities -->
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;">
-        <div class="label" style="margin-bottom:12px;">All Disaster Probabilities · ${horizonLabels[horizon]}</div>
+        <div class="label" style="margin-bottom:12px;">All Disaster Probabilities Â· ${horizonLabels[horizon]}</div>
         ${allProbs.map(({ type, data: ad, prob: ap }) => {
                 const apct = Math.round(ap * 100);
                 const ac = ap >= .75 ? 'var(--red)' : ap >= .50 ? 'var(--amber)' : ap >= .25 ? 'var(--blue)' : 'var(--green)';
@@ -2720,7 +2721,7 @@
 
       <!-- Historical events timeline -->
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;max-height:280px;overflow-y:auto;">
-        <div class="label" style="margin-bottom:12px;">Historical Event Log · ${d.label}</div>
+        <div class="label" style="margin-bottom:12px;">Historical Event Log Â· ${d.label}</div>
         ${d.events.slice().reverse().map(e => {
                 const sev = e.mag >= 9 ? 'var(--red)' : e.mag >= 7.5 ? 'var(--amber)' : 'var(--blue)';
                 return `<div class="timeline-event">
@@ -2775,7 +2776,7 @@
           `).join('')}
         </div>
         <div style="margin-top:12px;padding:10px 12px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:7px;font-size:11px;color:#A5B4FC;line-height:1.6;">
-          <strong>Confidence:</strong> ${Math.round(60 + prob * 30)}% · Based on ${d.events.length} historical events and current real-time sensor inputs. Model refreshes every 15 minutes.
+          <strong>Confidence:</strong> ${Math.round(60 + prob * 30)}% Â· Based on ${d.events.length} historical events and current real-time sensor inputs. Model refreshes every 15 minutes.
         </div>
       </div>
     </div>
@@ -2814,7 +2815,7 @@
       if (tab === 'gps') drawGpsCanvas();
     }
 
-    // ── Drone data per drone ──
+    // â”€â”€ Drone data per drone â”€â”€
     let droneData = {
       'ALPHA-1': { lat: 12.8236, lon: 80.0420, alt: 120, spd: 8.4, hdg: 214, bat: 87, sig: -62, name: 'ALPHA-1', mode: 'AUTO' },
       'BRAVO-2': { lat: 12.8225, lon: 80.0440, alt: 85, spd: 6.1, hdg: 178, bat: 54, sig: -70, name: 'BRAVO-2', mode: 'AUTO' },
@@ -2850,9 +2851,9 @@
 
       // Set up SRM Zones
       const zones = [
-        { name: 'Zone Alpha', center: [12.8236, 80.0420], color: '#EE8080', label: '12 survivors · Block 7' },
-        { name: 'Zone Beta', center: [12.8225, 80.0440], color: '#EE8080', label: '7 survivors · Hospital' },
-        { name: 'Zone Echo', center: [12.8200, 80.0380], color: '#DBA55A', label: 'Flood risk · Displaced' },
+        { name: 'Zone Alpha', center: [12.8236, 80.0420], color: '#EE8080', label: '12 survivors Â· Block 7' },
+        { name: 'Zone Beta', center: [12.8225, 80.0440], color: '#EE8080', label: '7 survivors Â· Hospital' },
+        { name: 'Zone Echo', center: [12.8200, 80.0380], color: '#DBA55A', label: 'Flood risk Â· Displaced' },
         { name: 'Zone Delta', center: [12.8250, 80.0460], color: '#DBA55A', label: 'Gas trace detected' }
       ];
 
@@ -2908,7 +2909,7 @@
       // Update sidebar AQI
       const aqiEl = document.querySelector('.sens-row:nth-child(2) .pill');
       if (aqiEl) {
-        aqiEl.textContent = `${data.aqi} — ${data.aqi > 300 ? 'Hazardous' : (data.aqi > 150 ? 'Unhealthy' : 'Moderate')}`;
+        aqiEl.textContent = `${data.aqi} â€” ${data.aqi > 300 ? 'Hazardous' : (data.aqi > 150 ? 'Unhealthy' : 'Moderate')}`;
         aqiEl.className = `pill ${data.aqi > 300 ? 'pill-red' : (data.aqi > 150 ? 'pill-amber' : 'pill-green')}`;
         aqiEl.style.fontSize = '10px';
         const aqiBar = document.querySelector('.sens-row:nth-child(2) .bar-fill');
@@ -2921,7 +2922,7 @@
       // Update sidebar Flood
       const floodEl = document.querySelector('.sens-row:nth-child(3) .pill');
       if (floodEl) {
-        floodEl.textContent = `+${data.floodLevel.toFixed(1)} m — ${data.floodLevel > 3.0 ? 'Critical' : (data.floodLevel > 1.5 ? 'Warning' : 'Normal')}`;
+        floodEl.textContent = `+${data.floodLevel.toFixed(1)} m â€” ${data.floodLevel > 3.0 ? 'Critical' : (data.floodLevel > 1.5 ? 'Warning' : 'Normal')}`;
         floodEl.className = `pill ${data.floodLevel > 3.0 ? 'pill-red' : (data.floodLevel > 1.5 ? 'pill-amber' : 'pill-green')}`;
         floodEl.style.fontSize = '10px';
         const floodBar = document.querySelector('.sens-row:nth-child(3) .bar-fill');
@@ -3000,11 +3001,11 @@
       const d = droneData[currentDrone];
       if (!d) return;
 
-      const latStr = d.lat.toFixed(4) + '°N';
-      const lonStr = d.lon.toFixed(4) + '°E';
+      const latStr = d.lat.toFixed(4) + 'Â\u00B0N';
+      const lonStr = d.lon.toFixed(4) + 'Â\u00B0E';
       const altStr = d.alt + ' m AGL';
       const spdStr = d.spd.toFixed(1) + ' m/s';
-      const hdgStr = d.hdg + '°';
+      const hdgStr = d.hdg + 'Â\u00B0';
       const batStr = d.bat + '%';
       const sigStr = d.sig + ' dBm';
 
@@ -3047,11 +3048,11 @@
       safe('full-gspd', spdStr);
       safe('full-vspd', '+0.2 m/s');
       safe('full-hdg', hdgStr);
-      safe('full-pitch', '−2.1°');
-      safe('full-roll', '+0.8°');
+      safe('full-pitch', 'âˆ’2.1Â\u00B0');
+      safe('full-roll', '+0.8Â\u00B0');
       safe('full-sig', sigStr);
       safe('full-volt', (22 + Math.random() * 2).toFixed(1) + ' V');
-      safe('full-temp', (40 + Math.random() * 5).toFixed(0) + '°C');
+      safe('full-temp', (40 + Math.random() * 5).toFixed(0) + 'Â\u00B0C');
     }
 
     function safe(id, val, color) {
@@ -3091,7 +3092,7 @@
       }, 1000);
     }
 
-    // ── Video canvas (simulated FPV terrain) ──
+    // â”€â”€ Video canvas (simulated FPV terrain) â”€â”€
     function drawVideoCanvas() {
       const canvas = document.getElementById('videoCanvas');
       if (!canvas) return;
@@ -3171,7 +3172,7 @@
       ctx.fillRect(0, 0, W, H);
     }
 
-    // ── Mini GPS map ──
+    // â”€â”€ Mini GPS map â”€â”€
     function updateMiniGps() {
       const dot = document.getElementById('gpsDot');
       const ring = document.getElementById('gpsRing');
@@ -3188,7 +3189,7 @@
       ring.style.top = yPct + '%';
     }
 
-    // ── Alt graph ──
+    // â”€â”€ Alt graph â”€â”€
     function drawAltGraph() {
       ['altGraph', 'altGraph2'].forEach(id => {
         const c = document.getElementById(id);
@@ -3216,7 +3217,7 @@
       });
     }
 
-    // ── GPS canvas (full GPS tab) ──
+    // â”€â”€ GPS canvas (full GPS tab) â”€â”€
     function drawGpsCanvas() {
       const canvas = document.getElementById('gpsCanvas');
       if (!canvas) return;
@@ -3272,13 +3273,13 @@
       ctx.fillText(d.name, cx + 12, cy - 6);
       ctx.fillStyle = 'rgba(139,149,168,0.8)';
       ctx.font = '10px DM Mono, monospace';
-      ctx.fillText(d.lat.toFixed(4) + '°N · ' + d.lon.toFixed(4) + '°E', cx + 12, cy + 8);
+      ctx.fillText(d.lat.toFixed(4) + 'Â\u00B0N Â· ' + d.lon.toFixed(4) + 'Â\u00B0E', cx + 12, cy + 8);
     }
 
-    // ── Recording toggle ──
+    // â”€â”€ Recording toggle â”€â”€
     async function toggleRecord(btn) {
       const originalHtml = btn.innerHTML;
-      btn.innerHTML = '⏳ Processing...';
+      btn.innerHTML = 'â³ Processing...';
       btn.disabled = true;
 
       const action = !isRecording ? 'start' : 'stop';
@@ -3299,7 +3300,7 @@
             btn.style.background = 'var(--red-dim)';
             btn.style.color = '#EE8080';
           } else {
-            btn.innerHTML = '⏸ Paused';
+            btn.innerHTML = 'â¸ Paused';
             btn.style.background = 'var(--surface3)';
             btn.style.color = 'var(--text2)';
           }
@@ -3315,13 +3316,13 @@
       }
     }
 
-    // ── Snapshot ──
+    // â”€â”€ Snapshot â”€â”€
     function captureSnapshot() {
       const msg = document.getElementById('snapMsg');
       if (msg) { msg.style.display = 'block'; setTimeout(() => msg.style.display = 'none', 2500); }
     }
 
-    // ── Connection ──
+    // â”€â”€ Connection â”€â”€
     let selectedProto = 'mavlink';
     function selectProto(el, proto) {
       selectedProto = proto;
@@ -3346,26 +3347,26 @@
         status.style.background = 'var(--red-dim)';
         status.style.border = '1px solid rgba(224,82,82,0.25)';
         status.style.color = '#EE8080';
-        status.textContent = '⚠ Please enter a host or IP address before connecting.';
+        status.textContent = 'âš  Please enter a host or IP address before connecting.';
         return;
       }
       status.style.display = 'block';
       status.style.background = 'var(--blue-dim)';
       status.style.border = '1px solid rgba(74,143,212,0.2)';
       status.style.color = '#80B0DC';
-      status.innerHTML = '⏳ Connecting to ' + host + '…';
+      status.innerHTML = 'â³ Connecting to ' + host + 'â€¦';
       setTimeout(() => {
         // Simulate success
         status.style.background = 'var(--green-dim)';
         status.style.border = '1px solid rgba(60,184,122,0.2)';
         status.style.color = '#6ED4A0';
         const id = document.getElementById('conn-id')?.value?.trim() || 'MY-DRONE-1';
-        status.innerHTML = '✓ Connected — ' + id + ' streaming via MAVLink from ' + host;
+        status.innerHTML = 'âœ“ Connected â€” ' + id + ' streaming via MAVLink from ' + host;
 
         // Add to fleet selector
         const sel = document.getElementById('droneSelect');
         if (sel && ![...sel.options].find(o => o.value === id)) {
-          const opt = new Option(id + ' — Connected', id);
+          const opt = new Option(id + ' â€” Connected', id);
           sel.insertBefore(opt, sel.options[sel.options.length - 1]);
         }
       }, 2200);
@@ -3373,18 +3374,18 @@
 
     function testConnection() {
       const status = document.getElementById('connStatus');
-      const host = document.getElementById('conn-host')?.value?.trim() || '—';
+      const host = document.getElementById('conn-host')?.value?.trim() || 'â€”';
       if (!status) return;
       status.style.display = 'block';
       status.style.background = 'var(--blue-dim)';
       status.style.border = '1px solid rgba(74,143,212,0.2)';
       status.style.color = '#80B0DC';
-      status.textContent = '⏳ Pinging ' + host + '…';
+      status.textContent = 'â³ Pinging ' + host + 'â€¦';
       setTimeout(() => {
         status.style.background = 'var(--green-dim)';
         status.style.border = '1px solid rgba(60,184,122,0.2)';
         status.style.color = '#6ED4A0';
-        status.textContent = '✓ Host reachable — latency 12 ms. Ready to connect.';
+        status.textContent = 'âœ“ Host reachable â€” latency 12 ms. Ready to connect.';
       }, 1200);
     }
 
@@ -3394,13 +3395,16 @@
       switchFeedTab('video', document.querySelectorAll('.feed-tab')[0]);
     }
 
-    // ════════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // SATELLITE SENSING MODULE
-    // ════════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     function openSatModal() {
-      document.getElementById('satModal').classList.add('open');
-      setTimeout(() => { renderSatImage(); updateSatStats(); }, 60);
+      console.log('[AEGIS] Opening Satellite Modal...');
+      const modal = document.getElementById('satModal');
+      if (!modal) return console.error('satModal element not found');
+      modal.classList.add('open');
+      setTimeout(() => { renderSatImage(); updateSatStats(); }, 100);
     }
     function closeSatModal() { document.getElementById('satModal').classList.remove('open'); }
 
@@ -3412,64 +3416,64 @@
     let compareMode = false;
 
     const bandMeta = {
-      truecolor: { label: 'True Colour (RGB)', desc: 'Natural colour composite — Band 4,3,2', palette: null },
-      falsecolor: { label: 'False Colour (NIR)', desc: 'Vegetation in red — Band 8,4,3', palette: null },
-      ndvi: { label: 'NDVI — Vegetation Index', desc: 'Green = healthy vegetation, Brown = bare', palette: 'ndvi' },
-      ndwi: { label: 'NDWI — Water Index', desc: 'Blue = water body, white = land', palette: 'ndwi' },
-      thermal: { label: 'Thermal Infrared (LST)', desc: 'Temperature mapping — Band 10/11', palette: 'thermal' },
-      sar: { label: 'SAR — Flood Mapping', desc: 'Synthetic Aperture Radar — flood extent', palette: 'sar' },
-      elevation: { label: 'DEM — Elevation Model', desc: 'Terrain elevation from SRTM 30m', palette: 'dem' },
+      truecolor: { label: 'True Colour (RGB)', desc: 'Natural colour composite â€” Band 4,3,2', palette: null },
+      falsecolor: { label: 'False Colour (NIR)', desc: 'Vegetation in red â€” Band 8,4,3', palette: null },
+      ndvi: { label: 'NDVI â€” Vegetation Index', desc: 'Green = healthy vegetation, Brown = bare', palette: 'ndvi' },
+      ndwi: { label: 'NDWI â€” Water Index', desc: 'Blue = water body, white = land', palette: 'ndwi' },
+      thermal: { label: 'Thermal Infrared (LST)', desc: 'Temperature mapping â€” Band 10/11', palette: 'thermal' },
+      sar: { label: 'SAR â€” Flood Mapping', desc: 'Synthetic Aperture Radar â€” flood extent', palette: 'sar' },
+      elevation: { label: 'DEM â€” Elevation Model', desc: 'Terrain elevation from SRTM 30m', palette: 'dem' },
       change: { label: 'Change Detection', desc: 'Pre/post disaster difference composite', palette: 'change' },
     };
 
     const analysisResults = {
       truecolor: [
-        { icon: '🌿', label: 'Vegetation Cover', value: '34.2%', status: 'warn', detail: 'Reduced from 41.8% pre-event. Significant deforestation and debris.' },
-        { icon: '🏙️', label: 'Built-up Area', value: '28.7%', status: 'info', detail: 'Urban structures detected. Cross-referencing collapse signatures.' },
-        { icon: '💧', label: 'Open Water', value: '22.1%', status: 'crit', detail: 'Up 14.3% from baseline. Flood inundation confirmed.' },
-        { icon: '🟫', label: 'Bare Soil / Debris', value: '15.0%', status: 'warn', detail: 'Newly exposed — consistent with earthquake liquefaction zones.' },
+        { icon: 'ðŸŒ¿', label: 'Vegetation Cover', value: '34.2%', status: 'warn', detail: 'Reduced from 41.8% pre-event. Significant deforestation and debris.' },
+        { icon: 'ðŸ™ï¸', label: 'Built-up Area', value: '28.7%', status: 'info', detail: 'Urban structures detected. Cross-referencing collapse signatures.' },
+        { icon: 'ðŸ’§', label: 'Open Water', value: '22.1%', status: 'crit', detail: 'Up 14.3% from baseline. Flood inundation confirmed.' },
+        { icon: 'ðŸŸ«', label: 'Bare Soil / Debris', value: '15.0%', status: 'warn', detail: 'Newly exposed â€” consistent with earthquake liquefaction zones.' },
       ],
       ndvi: [
-        { icon: '🌱', label: 'High Vegetation (>0.6)', value: '18.4%', status: 'good', detail: 'Healthy forest canopy. Undamaged — northern hill tracts.' },
-        { icon: '🌾', label: 'Moderate Veg (0.3–0.6)', value: '22.8%', status: 'warn', detail: 'Stressed crops. Flood waterlogging impact on agriculture.' },
-        { icon: '🏜️', label: 'Sparse Veg (0.1–0.3)', value: '28.9%', status: 'warn', detail: 'Degraded — post-quake slope failure areas.' },
-        { icon: '⬜', label: 'No Vegetation (<0.1)', value: '29.9%', status: 'crit', detail: 'Water bodies, roads, and bare debris fields.' },
+        { icon: 'ðŸŒ±', label: 'High Vegetation (>0.6)', value: '18.4%', status: 'good', detail: 'Healthy forest canopy. Undamaged â€” northern hill tracts.' },
+        { icon: 'ðŸŒ¾', label: 'Moderate Veg (0.3â€“0.6)', value: '22.8%', status: 'warn', detail: 'Stressed crops. Flood waterlogging impact on agriculture.' },
+        { icon: 'ðŸœï¸', label: 'Sparse Veg (0.1â€“0.3)', value: '28.9%', status: 'warn', detail: 'Degraded â€” post-quake slope failure areas.' },
+        { icon: 'â¬œ', label: 'No Vegetation (<0.1)', value: '29.9%', status: 'crit', detail: 'Water bodies, roads, and bare debris fields.' },
       ],
       ndwi: [
-        { icon: '🌊', label: 'Flooded Area', value: '22.1 km²', status: 'crit', detail: 'Active flood extent. Surma & Kushiyara rivers overflowing.' },
-        { icon: '🏞️', label: 'Waterlogged Land', value: '8.4 km²', status: 'warn', detail: 'Saturated soil — high landslide risk on adjacent slopes.' },
-        { icon: '🏘️', label: 'Submerged Urban', value: '4.7 km²', status: 'crit', detail: 'Residential zones below 4m ASL now inundated.' },
-        { icon: '📈', label: 'Flood Expansion Rate', value: '+0.6 km²/hr', status: 'crit', detail: 'Upstream precipitation continues. Peak in ~6 hours.' },
+        { icon: 'ðŸŒŠ', label: 'Flooded Area', value: '22.1 kmÂ²', status: 'crit', detail: 'Active flood extent. Surma & Kushiyara rivers overflowing.' },
+        { icon: 'ðŸžï¸', label: 'Waterlogged Land', value: '8.4 kmÂ²', status: 'warn', detail: 'Saturated soil â€” high landslide risk on adjacent slopes.' },
+        { icon: 'ðŸ˜ï¸', label: 'Submerged Urban', value: '4.7 kmÂ²', status: 'crit', detail: 'Residential zones below 4m ASL now inundated.' },
+        { icon: 'ðŸ“ˆ', label: 'Flood Expansion Rate', value: '+0.6 kmÂ²/hr', status: 'crit', detail: 'Upstream precipitation continues. Peak in ~6 hours.' },
       ],
       thermal: [
-        { icon: '🌡️', label: 'Mean Surface Temp', value: '34.2°C', status: 'warn', detail: '3.8°C above seasonal baseline due to exposed rubble.' },
-        { icon: '🔴', label: 'Heat Anomalies (>42°C)', value: '7 zones', status: 'crit', detail: 'Possible fire or trapped survivor heat signatures detected.' },
-        { icon: '🧊', label: 'Cool Zones (<24°C)', value: '3 zones', status: 'good', detail: 'Deep water bodies and shaded flood zones.' },
-        { icon: '🏗️', label: 'Building Heat Retention', value: 'High', status: 'warn', detail: 'Collapsed structures retaining heat — rescue priority.' },
+        { icon: 'ðŸŒ¡ï¸', label: 'Mean Surface Temp', value: '34.2\u00B0C', status: 'warn', detail: '3.8Â\u00B0C above seasonal baseline due to exposed rubble.' },
+        { icon: 'ðŸ”´', label: 'Heat Anomalies (>42Â\u00B0C)', value: '7 zones', status: 'crit', detail: 'Possible fire or trapped survivor heat signatures detected.' },
+        { icon: 'ðŸ§Š', label: 'Cool Zones (<24Â\u00B0C)', value: '3 zones', status: 'good', detail: 'Deep water bodies and shaded flood zones.' },
+        { icon: 'ðŸ—ï¸', label: 'Building Heat Retention', value: 'High', status: 'warn', detail: 'Collapsed structures retaining heat â€” rescue priority.' },
       ],
       sar: [
-        { icon: '🌊', label: 'SAR Flood Extent', value: '31.6 km²', status: 'crit', detail: 'Includes surface water + double-bounce from submerged buildings.' },
-        { icon: '🏚️', label: 'Collapsed Structures', value: '~340 bldgs', status: 'crit', detail: 'Low backscatter patches in urban grid — structural collapse.' },
-        { icon: '🛣️', label: 'Road Accessibility', value: '42% blocked', status: 'warn', detail: '18 of 43 primary routes flooded or debris-blocked.' },
-        { icon: '⛰️', label: 'Landslide Scarps', value: '12 detected', status: 'warn', detail: 'Slope failure signatures in Jaintiapur hill area.' },
+        { icon: 'ðŸŒŠ', label: 'SAR Flood Extent', value: '31.6 kmÂ²', status: 'crit', detail: 'Includes surface water + double-bounce from submerged buildings.' },
+        { icon: 'ðŸšï¸', label: 'Collapsed Structures', value: '~340 bldgs', status: 'crit', detail: 'Low backscatter patches in urban grid â€” structural collapse.' },
+        { icon: 'ðŸ›£ï¸', label: 'Road Accessibility', value: '42% blocked', status: 'warn', detail: '18 of 43 primary routes flooded or debris-blocked.' },
+        { icon: 'â›\u00B0ï¸', label: 'Landslide Scarps', value: '12 detected', status: 'warn', detail: 'Slope failure signatures in Jaintiapur hill area.' },
       ],
       falsecolor: [
-        { icon: '🌲', label: 'Canopy Density', value: '38.1%', status: 'good', detail: 'NIR reflectance shows intact canopy in protected reserves.' },
-        { icon: '🌾', label: 'Crop Stress Index', value: '0.71', status: 'warn', detail: 'Elevated stress from waterlogging. Harvest at risk.' },
-        { icon: '🏭', label: 'Industrial Heat Plumes', value: '3 sites', status: 'info', detail: 'Possible fuel leak or industrial fire signatures.' },
-        { icon: '🌿', label: 'Riparian Vegetation', value: 'Degraded', status: 'warn', detail: 'Riverbank vegetation stripped by flood surge.' },
+        { icon: 'ðŸŒ²', label: 'Canopy Density', value: '38.1%', status: 'good', detail: 'NIR reflectance shows intact canopy in protected reserves.' },
+        { icon: 'ðŸŒ¾', label: 'Crop Stress Index', value: '0.71', status: 'warn', detail: 'Elevated stress from waterlogging. Harvest at risk.' },
+        { icon: 'ðŸ­', label: 'Industrial Heat Plumes', value: '3 sites', status: 'info', detail: 'Possible fuel leak or industrial fire signatures.' },
+        { icon: 'ðŸŒ¿', label: 'Riparian Vegetation', value: 'Degraded', status: 'warn', detail: 'Riverbank vegetation stripped by flood surge.' },
       ],
       elevation: [
-        { icon: '⛰️', label: 'Max Elevation', value: '612 m', status: 'info', detail: 'Jaintia Hills — northern sector.' },
-        { icon: '🏝️', label: 'Areas < 5m ASL', value: '18.4%', status: 'crit', detail: 'Low-lying zones — highest flood inundation risk.' },
-        { icon: '📐', label: 'Mean Slope', value: '8.2°', status: 'warn', detail: 'Average terrain slope. Slopes >25° flagged for landslide.' },
-        { icon: '🌊', label: 'Flood Vulnerable Area', value: '22.1 km²', status: 'crit', detail: 'Land below current flood stage elevation.' },
+        { icon: 'â›\u00B0ï¸', label: 'Max Elevation', value: '612 m', status: 'info', detail: 'Jaintia Hills â€” northern sector.' },
+        { icon: 'ðŸï¸', label: 'Areas < 5m ASL', value: '18.4%', status: 'crit', detail: 'Low-lying zones â€” highest flood inundation risk.' },
+        { icon: 'ðŸ“', label: 'Mean Slope', value: '8.2Â\u00B0', status: 'warn', detail: 'Average terrain slope. Slopes >25Â\u00B0 flagged for landslide.' },
+        { icon: 'ðŸŒŠ', label: 'Flood Vulnerable Area', value: '22.1 kmÂ²', status: 'crit', detail: 'Land below current flood stage elevation.' },
       ],
       change: [
-        { icon: '🔴', label: 'High Change Zones', value: '12.3 km²', status: 'crit', detail: 'Structural collapse, landslide, and major flood zones.' },
-        { icon: '🟡', label: 'Moderate Change', value: '18.7 km²', status: 'warn', detail: 'Partial flooding, road damage, crop inundation.' },
-        { icon: '🟢', label: 'No Change', value: '64.0 km²', status: 'good', detail: 'Unaffected areas — safe for staging and logistics.' },
-        { icon: '📅', label: 'Baseline Image Date', value: '2025-03-01', status: 'info', detail: 'Sentinel-2 L2A pre-event capture. 10m resolution.' },
+        { icon: 'ðŸ”´', label: 'High Change Zones', value: '12.3 kmÂ²', status: 'crit', detail: 'Structural collapse, landslide, and major flood zones.' },
+        { icon: 'ðŸŸ¡', label: 'Moderate Change', value: '18.7 kmÂ²', status: 'warn', detail: 'Partial flooding, road damage, crop inundation.' },
+        { icon: 'ðŸŸ¢', label: 'No Change', value: '64.0 kmÂ²', status: 'good', detail: 'Unaffected areas â€” safe for staging and logistics.' },
+        { icon: 'ðŸ“…', label: 'Baseline Image Date', value: '2025-03-01', status: 'info', detail: 'Sentinel-2 L2A pre-event capture. 10m resolution.' },
       ],
     };
 
@@ -3623,7 +3627,7 @@
         ctx.beginPath(); ctx.arc(0.43 * W, 0.52 * H, 22, 0, Math.PI * 2);
         ctx.strokeStyle = 'rgba(224,82,82,0.4)'; ctx.lineWidth = 1; ctx.stroke();
         ctx.fillStyle = 'rgba(224,82,82,0.9)'; ctx.font = 'bold 10px DM Mono,monospace';
-        ctx.fillText('⚡ M7.4', 0.44 * W, 0.50 * H);
+        ctx.fillText('âš¡ M7.4', 0.44 * W, 0.50 * H);
       }
 
       if (document.getElementById('sat-overlay-drones')?.checked) {
@@ -3645,11 +3649,11 @@
 
       // Coordinate grid labels
       ctx.fillStyle = 'rgba(74,143,212,0.55)'; ctx.font = '9px DM Mono,monospace';
-      ctx.fillText('24.860°N', 6, 14);
-      ctx.fillText('24.840°N', 6, H / 2);
-      ctx.fillText('24.820°N', 6, H - 6);
-      ctx.fillText('91.88°E', W * 0.25, H - 6);
-      ctx.fillText('91.92°E', W * 0.65, H - 6);
+      ctx.fillText('24.860\u00B0N', 6, 14);
+      ctx.fillText('24.840\u00B0N', 6, H / 2);
+      ctx.fillText('24.820\u00B0N', 6, H - 6);
+      ctx.fillText('91.88\u00B0E', W * 0.25, H - 6);
+      ctx.fillText('91.92\u00B0E', W * 0.65, H - 6);
 
       // Scale bar
       ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.fillRect(W - 90, H - 22, 60, 3);
@@ -3749,10 +3753,10 @@
 
   </script>
 
-  <!-- ════════════════════════════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
      SATELLITE SENSING MODAL
-════════════════════════════════════════════════════════════════ -->
-  <!-- ════════════════════ PREDICTIVE AI MODAL ════════════════════ -->
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• PREDICTIVE AI MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <style>
     .pred-modal-overlay {
       position: fixed;
@@ -3820,7 +3824,7 @@
   <div class="pred-modal-overlay" id="predModal">
     <div class="pred-modal">
       <div class="sat-header">
-        <span style="font-size:20px;">🧠</span>
+        <span style="font-size:20px;">ðŸ§ </span>
         <div style="flex:1;">
           <div style="font-size:15px;font-weight:700;">AI Predictive Intelligence Hub</div>
           <div style="font-size:11px;color:var(--text2);">Analysis based on 2014-2024 Indian Disaster Records</div>
@@ -4023,10 +4027,10 @@
       <div class="sat-header">
         <div
           style="width:34px;height:34px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">
-          🛰️</div>
+          ðŸ›\u00B0ï¸</div>
         <div style="flex:1;">
           <div style="font-size:14px;font-weight:700;line-height:1.2;">Satellite Terrain Sensing</div>
-          <div style="font-size:11px;color:var(--text2);">Sentinel-2 · Landsat-9 · SRTM DEM · Copernicus EMS · 10m–30m
+          <div style="font-size:11px;color:var(--text2);">Sentinel-2 Â· Landsat-9 Â· SRTM DEM Â· Copernicus EMS Â· 10mâ€“30m
             resolution</div>
         </div>
 
@@ -4054,16 +4058,16 @@
 
         <span class="pill pill-green" style="font-size:10px;margin-right:4px;">
           <span style="width:5px;height:5px;background:var(--green);border-radius:50%;display:inline-block;"></span>
-          Last pass: 02:14 UTC · 3h ago
+          Last pass: 02:14 UTC Â· 3h ago
         </span>
 
         <button onclick="refreshSatImage()"
           style="background:var(--surface3);border:1px solid var(--border2);border-radius:6px;color:var(--text2);cursor:pointer;padding:5px 10px;font-size:12px;font-family:'DM Sans',sans-serif;transition:all .15s;margin-right:4px;"
           title="Refresh / new tile" onmouseover="this.style.color='var(--text)'"
-          onmouseout="this.style.color='var(--text2)'">↻ Refresh</button>
+          onmouseout="this.style.color='var(--text2)'">â†» Refresh</button>
         <button onclick="closeSatModal()"
           style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;padding:5px 10px;font-size:13px;font-family:'DM Sans',sans-serif;transition:all .15s;"
-          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">✕</button>
+          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">âœ•</button>
       </div>
 
       <!-- Body -->
@@ -4074,56 +4078,56 @@
           <div class="label" style="padding:4px 14px 8px;"> Spectral Bands</div>
 
           <button class="sat-band-btn active" data-band="truecolor" onclick="setSatBand('truecolor')">
-            <span class="sat-band-icon">🌍</span>
+            <span class="sat-band-icon">ðŸŒ</span>
             <div>
               <div style="font-weight:600;">True Colour</div>
               <div style="font-size:10px;color:var(--text3);">RGB Natural</div>
             </div>
           </button>
           <button class="sat-band-btn" data-band="falsecolor" onclick="setSatBand('falsecolor')">
-            <span class="sat-band-icon">🌺</span>
+            <span class="sat-band-icon">ðŸŒº</span>
             <div>
               <div style="font-weight:600;">False Colour</div>
               <div style="font-size:10px;color:var(--text3);">NIR Vegetation</div>
             </div>
           </button>
           <button class="sat-band-btn" data-band="ndvi" onclick="setSatBand('ndvi')">
-            <span class="sat-band-icon">🌿</span>
+            <span class="sat-band-icon">ðŸŒ¿</span>
             <div>
               <div style="font-weight:600;">NDVI</div>
               <div style="font-size:10px;color:var(--text3);">Vegetation Index</div>
             </div>
           </button>
           <button class="sat-band-btn" data-band="ndwi" onclick="setSatBand('ndwi')">
-            <span class="sat-band-icon">💧</span>
+            <span class="sat-band-icon">ðŸ’§</span>
             <div>
               <div style="font-weight:600;">NDWI</div>
               <div style="font-size:10px;color:var(--text3);">Water Index</div>
             </div>
           </button>
           <button class="sat-band-btn" data-band="thermal" onclick="setSatBand('thermal')">
-            <span class="sat-band-icon">🌡️</span>
+            <span class="sat-band-icon">ðŸŒ¡ï¸</span>
             <div>
               <div style="font-weight:600;">Thermal (LST)</div>
               <div style="font-size:10px;color:var(--text3);">Surface Temp</div>
             </div>
           </button>
           <button class="sat-band-btn" data-band="sar" onclick="setSatBand('sar')">
-            <span class="sat-band-icon">📡</span>
+            <span class="sat-band-icon">ðŸ“¡</span>
             <div>
               <div style="font-weight:600;">SAR Flood Map</div>
               <div style="font-size:10px;color:var(--text3);">Synthetic Aperture</div>
             </div>
           </button>
           <button class="sat-band-btn" data-band="elevation" onclick="setSatBand('elevation')">
-            <span class="sat-band-icon">⛰️</span>
+            <span class="sat-band-icon">â›\u00B0ï¸</span>
             <div>
               <div style="font-weight:600;">DEM Elevation</div>
               <div style="font-size:10px;color:var(--text3);">SRTM 30m</div>
             </div>
           </button>
           <button class="sat-band-btn" data-band="change" onclick="setSatBand('change')">
-            <span class="sat-band-icon">🔄</span>
+            <span class="sat-band-icon">ðŸ”„</span>
             <div>
               <div style="font-weight:600;">Change Detection</div>
               <div style="font-size:10px;color:var(--text3);">Pre/Post Diff</div>
@@ -4168,7 +4172,7 @@
         <div class="sat-center">
           <div class="sat-toolbar">
             <div style="font-size:12px;font-weight:600;" id="sat-band-label">True Colour (RGB)</div>
-            <div style="font-size:11px;color:var(--text2);" id="sat-band-desc">Natural colour composite — Band 4,3,2
+            <div style="font-size:11px;color:var(--text2);" id="sat-band-desc">Natural colour composite â€” Band 4,3,2
             </div>
             <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
               <span style="font-size:11px;color:var(--text2);">Capture:</span>
@@ -4237,7 +4241,7 @@
                 style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:6px;">
                 <div>
                   <div style="font-size:12px;font-weight:600;">Sentinel-2B</div>
-                  <div style="font-size:10px;color:var(--text2);">2025-03-08 02:14 UTC · Post-event</div>
+                  <div style="font-size:10px;color:var(--text2);">2025-03-08 02:14 UTC Â· Post-event</div>
                 </div>
                 <span class="pill pill-green" style="font-size:10px;">Active</span>
               </div>
@@ -4245,7 +4249,7 @@
                 style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;">
                 <div>
                   <div style="font-size:12px;font-weight:600;">Sentinel-2A</div>
-                  <div style="font-size:10px;color:var(--text2);">2025-03-01 02:18 UTC · Pre-event</div>
+                  <div style="font-size:10px;color:var(--text2);">2025-03-01 02:18 UTC Â· Pre-event</div>
                 </div>
                 <span class="pill pill-neutral" style="font-size:10px;">Baseline</span>
               </div>
@@ -4253,7 +4257,7 @@
                 style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;">
                 <div>
                   <div style="font-size:12px;font-weight:600;">Sentinel-1 SAR</div>
-                  <div style="font-size:10px;color:var(--text2);">2025-03-08 03:02 UTC · C-Band VV</div>
+                  <div style="font-size:10px;color:var(--text2);">2025-03-08 03:02 UTC Â· C-Band VV</div>
                 </div>
                 <span class="pill pill-blue" style="font-size:10px;">Available</span>
               </div>
@@ -4261,7 +4265,7 @@
                 style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;">
                 <div>
                   <div style="font-size:12px;font-weight:600;">Landsat-9</div>
-                  <div style="font-size:10px;color:var(--text2);">2025-03-07 04:30 UTC · OLI/TIRS</div>
+                  <div style="font-size:10px;color:var(--text2);">2025-03-07 04:30 UTC Â· OLI/TIRS</div>
                 </div>
                 <span class="pill pill-blue" style="font-size:10px;">Available</span>
               </div>
@@ -4273,17 +4277,17 @@
             <div style="display:flex;flex-direction:column;gap:6px;">
               <div
                 style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--border);">
-                <span style="color:var(--text2);">Total area analysed</span><span class="mono">95.2 km²</span>
+                <span style="color:var(--text2);">Total area analysed</span><span class="mono">95.2 kmÂ²</span>
               </div>
               <div
                 style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--border);">
                 <span style="color:var(--text2);">Flooded area (SAR)</span><span class="mono"
-                  style="color:#EE8080;">31.6 km²</span>
+                  style="color:#EE8080;">31.6 kmÂ²</span>
               </div>
               <div
                 style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--border);">
-                <span style="color:var(--text2);">Slope >25° (landslide)</span><span class="mono"
-                  style="color:#DBA55A;">8.4 km²</span>
+                <span style="color:var(--text2);">Slope >25Â\u00B0 (landslide)</span><span class="mono"
+                  style="color:#DBA55A;">8.4 kmÂ²</span>
               </div>
               <div
                 style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--border);">
@@ -4297,8 +4301,8 @@
               </div>
               <div
                 style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--border);">
-                <span style="color:var(--text2);">Vegetation loss</span><span class="mono" style="color:#DBA55A;">−7.6
-                  km²</span>
+                <span style="color:var(--text2);">Vegetation loss</span><span class="mono" style="color:#DBA55A;">âˆ’7.6
+                  kmÂ²</span>
               </div>
               <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span
                   style="color:var(--text2);">Image resolution</span><span class="mono">10 m / pixel</span></div>
@@ -4330,7 +4334,7 @@
       const lat = (24.86 - (py / canvas.height) * 0.04).toFixed(4);
       const ndviEst = (((p[1] - p[0]) / (p[1] + p[0] + 1))).toFixed(3);
       document.getElementById('pixel-info').innerHTML =
-        `<strong style="color:var(--text);">Position</strong><br>${lat}°N · ${lon}°E<br>` +
+        `<strong style="color:var(--text);">Position</strong><br>${lat}Â\u00B0N Â· ${lon}Â\u00B0E<br>` +
         `<strong style="color:var(--text);">Pixel (R,G,B)</strong><br>${p[0]}, ${p[1]}, ${p[2]}<br>` +
         `<strong style="color:var(--text);">Est. NDVI</strong>&nbsp; ${ndviEst}<br>` +
         `<strong style="color:var(--text);">Band</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${bandMeta[satBand]?.label || satBand}`;
@@ -4368,7 +4372,7 @@
              <span class="pill pill-${d.impact === 'Critical' ? 'red' : 'amber'}" style="font-size:10px;">${d.year}</span>
           </div>
           <div style="font-size:11px; color:var(--text2); margin-top:5px;">
-            Fatalities: <strong style="color:var(--red);">${d.deaths}</strong> · ${d.impact}
+            Fatalities: <strong style="color:var(--red);">${d.deaths}</strong> Â· ${d.impact}
           </div>
         </div>
       `).join('');
