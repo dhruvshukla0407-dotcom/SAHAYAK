@@ -1177,7 +1177,7 @@
             <span style="font-weight:600;font-size:12px;">ECHO-3</span>
             <span class="pill pill-amber" style="font-size:10px;">Returning</span>
           </div>
-          <div style="font-size:11px;color:#DBA55A;margin-bottom:5px;">⚠ Low battery — Zone C uncovered</div>
+          <div style="font-size:11px;color:#DBA55A;margin-bottom:5px;">⚠ Low battery — Zone Echo uncovered</div>
           <div class="bar-track">
             <div class="bar-fill" style="width:22%;background:#E05252;"></div>
           </div>
@@ -3599,31 +3599,49 @@
       ctx.putImageData(img, 0, 0);
 
       // --- Overlays ---
-      // Zone bounding boxes
-      const zones = [
-        { x: .18, y: .14, w: .20, h: .16, label: 'Zone Alpha', col: 'rgba(224,82,82,0.7)', bg: 'rgba(224,82,82,0.12)' },
-        { x: .57, y: .30, w: .18, h: .14, label: 'Zone Beta', col: 'rgba(224,82,82,0.7)', bg: 'rgba(224,82,82,0.12)' },
-        { x: .07, y: .56, w: .20, h: .14, label: 'Zone Gamma', col: 'rgba(212,136,42,0.7)', bg: 'rgba(212,136,42,0.1)' },
-        { x: .67, y: .09, w: .18, h: .12, label: 'Zone Delta', col: 'rgba(212,136,42,0.7)', bg: 'rgba(212,136,42,0.1)' },
-        { x: .35, y: .64, w: .16, h: .12, label: 'Zone Echo', col: 'rgba(60,184,122,0.7)', bg: 'rgba(60,184,122,0.08)' },
-      ];
-      zones.forEach(z => {
-        ctx.strokeStyle = z.col; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]);
-        ctx.strokeRect(z.x * W, z.y * H, z.w * W, z.h * H); ctx.setLineDash([]);
-        ctx.fillStyle = z.bg;
-        ctx.fillRect(z.x * W, z.y * H, z.w * W, z.h * H);
-        ctx.fillStyle = z.col.replace('0.7', '1');
-        ctx.font = 'bold 10px DM Mono, monospace';
-        ctx.fillText(z.label, z.x * W + 4, z.y * H + 12);
-      });
+      if (document.getElementById('sat-overlay-zones')?.checked) {
+        const zones = [
+          { x: .18, y: .14, w: .20, h: .16, label: 'Zone Alpha', col: 'rgba(224,82,82,0.7)', bg: 'rgba(224,82,82,0.12)' },
+          { x: .57, y: .30, w: .18, h: .14, label: 'Zone Beta', col: 'rgba(224,82,82,0.7)', bg: 'rgba(224,82,82,0.12)' },
+          { x: .07, y: .56, w: .20, h: .14, label: 'Zone Echo', col: 'rgba(212,136,42,0.7)', bg: 'rgba(212,136,42,0.1)' },
+          { x: .67, y: .09, w: .18, h: .12, label: 'Zone Delta', col: 'rgba(212,136,42,0.7)', bg: 'rgba(212,136,42,0.1)' },
+        ];
+        zones.forEach(z => {
+          ctx.strokeStyle = z.col; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]);
+          ctx.strokeRect(z.x * W, z.y * H, z.w * W, z.h * H); ctx.setLineDash([]);
+          ctx.fillStyle = z.bg;
+          ctx.fillRect(z.x * W, z.y * H, z.w * W, z.h * H);
+          ctx.fillStyle = z.col.replace('0.7', '1');
+          ctx.font = 'bold 10px DM Mono, monospace';
+          ctx.fillText(z.label, z.x * W + 4, z.y * H + 12);
+        });
+      }
 
-      // Epicentre marker
-      ctx.beginPath(); ctx.arc(0.43 * W, 0.52 * H, 10, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(224,82,82,0.9)'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.beginPath(); ctx.arc(0.43 * W, 0.52 * H, 22, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(224,82,82,0.4)'; ctx.lineWidth = 1; ctx.stroke();
-      ctx.fillStyle = 'rgba(224,82,82,0.9)'; ctx.font = 'bold 10px DM Mono,monospace';
-      ctx.fillText('⚡ M7.4', 0.44 * W, 0.50 * H);
+      if (document.getElementById('sat-overlay-epicentre')?.checked) {
+        ctx.beginPath(); ctx.arc(0.43 * W, 0.52 * H, 10, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(224,82,82,0.9)'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.beginPath(); ctx.arc(0.43 * W, 0.52 * H, 22, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(224,82,82,0.4)'; ctx.lineWidth = 1; ctx.stroke();
+        ctx.fillStyle = 'rgba(224,82,82,0.9)'; ctx.font = 'bold 10px DM Mono,monospace';
+        ctx.fillText('⚡ M7.4', 0.44 * W, 0.50 * H);
+      }
+
+      if (document.getElementById('sat-overlay-drones')?.checked) {
+        for (const id in droneData) {
+          const d = droneData[id];
+          const x = 0.3 + (Math.sin(sd + id.length) * 0.2);
+          const y = 0.4 + (Math.cos(sd + id.length) * 0.2);
+          ctx.fillStyle = 'var(--amber)';
+          ctx.beginPath(); ctx.arc(x * W, y * H, 4, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#fff'; ctx.font = '9px DM Mono, monospace';
+          ctx.fillText(id, x * W + 6, y * H + 3);
+        }
+      }
+
+      if (document.getElementById('sat-overlay-flood')?.checked && satBand !== 'sar') {
+        ctx.fillStyle = 'rgba(74, 143, 212, 0.25)';
+        ctx.fillRect(0, H * 0.6, W, H * 0.4);
+      }
 
       // Coordinate grid labels
       ctx.fillStyle = 'rgba(74,143,212,0.55)'; ctx.font = '9px DM Mono,monospace';
@@ -3714,6 +3732,18 @@
 
     function refreshSatImage() {
       satSeed = Math.random() * 9999 | 0;
+      renderSatImage();
+    }
+
+    function setSatRegion(val) {
+      satRegion = val;
+      const seeds = { sylhet: 1234, surma: 5678, jaintia: 9012, urban: 3456 };
+      satSeed = seeds[val] || 1234;
+      renderSatImage();
+    }
+
+    function setSatSource(val) {
+      satSeed += 1; // Slight shift for different source feel
       renderSatImage();
     }
 
@@ -4002,23 +4032,23 @@
 
         <div style="display:flex;align-items:center;gap:6px;margin-right:4px;">
           <span style="font-size:11px;color:var(--text2);">Source:</span>
-          <select onchange=""
+          <select id="sat-source-select" onchange="setSatSource(this.value)"
             style="background:var(--surface3);border:1px solid var(--border2);border-radius:5px;padding:4px 9px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;outline:none;cursor:pointer;">
-            <option>Sentinel-2 L2A (10m)</option>
-            <option>Landsat-9 (30m)</option>
-            <option>SRTM DEM (30m)</option>
-            <option>Copernicus EMS</option>
+            <option value="sentinel2">Sentinel-2 L2A (10m)</option>
+            <option value="landsat9">Landsat-9 (30m)</option>
+            <option value="srtm">SRTM DEM (30m)</option>
+            <option value="copernicus">Copernicus EMS</option>
           </select>
         </div>
 
         <div style="display:flex;align-items:center;gap:6px;margin-right:4px;">
           <span style="font-size:11px;color:var(--text2);">Region:</span>
-          <select
+          <select id="sat-region-select" onchange="setSatRegion(this.value)"
             style="background:var(--surface3);border:1px solid var(--border2);border-radius:5px;padding:4px 9px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;outline:none;cursor:pointer;">
-            <option>Sylhet District (Full)</option>
-            <option>Surma River Basin</option>
-            <option>Jaintia Hills</option>
-            <option>Urban Core</option>
+            <option value="sylhet">Sylhet District (Full)</option>
+            <option value="surma">Surma River Basin</option>
+            <option value="jaintia">Jaintia Hills</option>
+            <option value="urban">Urban Core</option>
           </select>
         </div>
 
@@ -4104,22 +4134,23 @@
           <div class="label" style="padding:4px 14px 8px;">Overlays</div>
           <label
             style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;">
-            <input type="checkbox" checked onchange="renderSatImage()"
+            <input type="checkbox" id="sat-overlay-zones" checked onchange="renderSatImage()"
               style="accent-color:var(--green);width:13px;height:13px;"> Zone Boundaries
           </label>
           <label
             style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;">
-            <input type="checkbox" checked onchange="renderSatImage()"
+            <input type="checkbox" id="sat-overlay-epicentre" checked onchange="renderSatImage()"
               style="accent-color:var(--blue);width:13px;height:13px;"> Epicentre Marker
           </label>
           <label
             style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;">
-            <input type="checkbox" onchange="renderSatImage()"
+            <input type="checkbox" id="sat-overlay-drones" onchange="renderSatImage()"
               style="accent-color:var(--amber);width:13px;height:13px;"> Drone Positions
           </label>
           <label
             style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;">
-            <input type="checkbox" onchange="renderSatImage()" style="accent-color:var(--red);width:13px;height:13px;">
+            <input type="checkbox" id="sat-overlay-flood" onchange="renderSatImage()"
+              style="accent-color:var(--red);width:13px;height:13px;">
             Flood Extent (SAR)
           </label>
 
