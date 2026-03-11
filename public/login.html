@@ -189,7 +189,8 @@
     </div>
 
     <script>
-        const BACKEND_URL = window.location.port === '3000' ? '' : 'http://localhost:3000';
+        const BACKEND_URL = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+        console.log('[AEGIS] Login Init. Backend:', BACKEND_URL || 'Local');
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -198,6 +199,7 @@
             const error = document.getElementById('error');
 
             try {
+                console.log('[AEGIS] Attempting login for:', username);
                 const response = await fetch(`${BACKEND_URL}/api/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
