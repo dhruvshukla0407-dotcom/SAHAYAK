@@ -21,8 +21,61 @@ app.get('/', (req, res) => {
 });
 
 // --- ESP32-CAM Control Proxy ---
-// Replace this with your actual ESP32-CAM local IP address
-const ESP32_CAM_IP = 'http://192.168.1.100';
+const esp32Config = {
+  baseUrl: (process.env.ESP32_CAM_URL || 'http://192.168.1.100').replace(/\/$/, ''),
+  capturePath: process.env.ESP32_CAPTURE_PATH || '/capture',
+  streamPath: process.env.ESP32_STREAM_PATH || '/stream',
+  controlPath: process.env.ESP32_CONTROL_PATH || '/control',
+};
+
+function buildEsp32Url(pathname) {
+  const path = pathname.startsWith('/') ? pathname : `/${pathname}`;
+  return `${esp32Config.baseUrl}${path}`;
+}
+
+app.get('/api/esp32/config', (req, res) => {
+  res.json({ success: true, config: esp32Config });
+});
+
+app.post('/api/esp32/config', (req, res) => {
+  const { baseUrl, capturePath, streamPath, controlPath } = req.body || {};
+
+  if (baseUrl !== undefined) {
+    if (typeof baseUrl !== 'string' || !/^https?:\/\//i.test(baseUrl.trim())) {
+      return res.status(400).json({ success: false, message: 'baseUrl must start with http:// or https://' });
+    }
+    esp32Config.baseUrl = baseUrl.trim().replace(/\/$/, '');
+  }
+
+  if (capturePath) esp32Config.capturePath = capturePath.startsWith('/') ? capturePath : `/${capturePath}`;
+  if (streamPath) esp32Config.streamPath = streamPath.startsWith('/') ? streamPath : `/${streamPath}`;
+  if (controlPath) esp32Config.controlPath = controlPath.startsWith('/') ? controlPath : `/${controlPath}`;
+
+  console.log('[API] Updated ESP32-CAM config:', esp32Config);
+  return res.json({ success: true, config: esp32Config });
+});
+
+app.get('/api/esp32/snapshot', async (req, res) => {
+  try {
+    const espUrl = buildEsp32Url(esp32Config.capturePath);
+    const response = await axios.get(espUrl, {
+      responseType: 'arraybuffer',
+      timeout: 5000,
+      headers: { Accept: 'image/jpeg,image/*;q=0.9,*/*;q=0.8' }
+    });
+
+    res.set('Content-Type', response.headers['content-type'] || 'image/jpeg');
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    return res.send(Buffer.from(response.data));
+  } catch (error) {
+    console.error('[API] ESP32 snapshot error:', error.message);
+    return res.status(502).json({
+      success: false,
+      message: 'Failed to fetch snapshot from ESP32-CAM',
+      error: error.message
+    });
+  }
+});
 
 app.post('/api/drone/record', async (req, res) => {
   const { action } = req.body;
@@ -32,7 +85,7 @@ app.post('/api/drone/record', async (req, res) => {
     // Modify this URL structure to match your exact ESP32-CAM firmware API.
     // E.g., Many firmwares use /control?var=record&val=1
     const commandVal = action === 'start' ? '1' : '0';
-    const espUrl = `${ESP32_CAM_IP}/control?var=record&val=${commandVal}`;
+    const espUrl = `${buildEsp32Url(esp32Config.controlPath)}?var=record&val=${commandVal}`;
 
     console.log(`[API] Forwarding request to ESP32: ${espUrl}`);
 
