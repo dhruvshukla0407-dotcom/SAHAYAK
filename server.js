@@ -15,7 +15,6 @@ app.use(cors());
 app.use(express.json()); // Allow parsing JSON bodies
 app.use(express.static('public'));
 
-<<<<<<< HEAD
 // Default route to serve login if not authenticated (handled client-side usually)
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
@@ -77,11 +76,6 @@ app.get('/api/esp32/snapshot', async (req, res) => {
     });
   }
 });
-=======
-// --- ESP32-CAM Control Proxy ---
-// Replace this with your actual ESP32-CAM local IP address
-const ESP32_CAM_IP = 'http://192.168.1.100'; 
->>>>>>> 4da5bac4b14b89ef81d30101af85d94a1cbaea6e
 
 app.post('/api/drone/record', async (req, res) => {
   const { action } = req.body;
@@ -91,7 +85,6 @@ app.post('/api/drone/record', async (req, res) => {
     // Modify this URL structure to match your exact ESP32-CAM firmware API.
     // E.g., Many firmwares use /control?var=record&val=1
     const commandVal = action === 'start' ? '1' : '0';
-<<<<<<< HEAD
     const espUrl = `${buildEsp32Url(esp32Config.controlPath)}?var=record&val=${commandVal}`;
 
     console.log(`[API] Forwarding request to ESP32: ${espUrl}`);
@@ -99,36 +92,19 @@ app.post('/api/drone/record', async (req, res) => {
     // Set a timeout so the frontend doesn't hang forever if the ESP is offline
     const response = await axios.get(espUrl, { timeout: 3000 });
 
-=======
-    const espUrl = `${ESP32_CAM_IP}/control?var=record&val=${commandVal}`;
-    
-    console.log(`[API] Forwarding request to ESP32: ${espUrl}`);
-    
-    // Set a timeout so the frontend doesn't hang forever if the ESP is offline
-    const response = await axios.get(espUrl, { timeout: 3000 });
-    
->>>>>>> 4da5bac4b14b89ef81d30101af85d94a1cbaea6e
     // Forward success back to frontend
     res.json({ success: true, message: `ESP32 returned: ${response.statusText}` });
   } catch (error) {
     console.error(`[API] ESP32 Communication Error:`, error.message);
     // Even if it fails, we let the frontend know so it can show an error
-<<<<<<< HEAD
     res.status(502).json({
       success: false,
       message: 'Failed to communicate with ESP32-CAM',
       error: error.message
-=======
-    res.status(502).json({ 
-      success: false, 
-      message: 'Failed to communicate with ESP32-CAM',
-      error: error.message 
->>>>>>> 4da5bac4b14b89ef81d30101af85d94a1cbaea6e
     });
   }
 });
 
-<<<<<<< HEAD
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   console.log(`[AUTH] Login attempt for: ${username}`);
@@ -141,8 +117,6 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-=======
->>>>>>> 4da5bac4b14b89ef81d30101af85d94a1cbaea6e
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
 
@@ -167,8 +141,4 @@ setInterval(() => {
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`AEGIS Server running on http://localhost:${PORT}`);
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 4da5bac4b14b89ef81d30101af85d94a1cbaea6e
