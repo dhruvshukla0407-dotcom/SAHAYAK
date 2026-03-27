@@ -1,28 +1,62 @@
 #include "esp_camera.h"
+#include <WebSocketsClient.h>
 #include <WiFi.h>
-#include "FS.h"
-#include "SD_MMC.h"
-
-#define CAMERA_MODEL_AI_THINKER
-#define FLASH_LED_PIN 4
 
 #include "board_config.h"
 
-const char *ssid = "Siddharth";
-const char *password = "india@1234";
+const char *ssid = "Bhaskar";
+const char *password = "123456789";
+const char *deviceId = "esp32-cam-01";
 
-int pictureNumber = 0;
+const char *websocketHost = "172.20.10.3";
+const uint16_t websocketPort = 80;
+const char *websocketPath = "/ws";
 
-void startCameraServer();   // Web server declaration
+const int wifiReconnectDelayMs = 500;
+const framesize_t kStreamFrameSize = FRAMESIZE_CIF;
+const int kJpegQuality = 12;
+const unsigned long kFrameIntervalMs = 60;
+const bool kEnableLocalDebugServer = false;
 
-void setup() {
-  Serial.begin(115200);
-  Serial.setDebugOutput(true);
+WebSocketsClient webSocket;
+bool wsConnected = false;
+unsigned long lastFrameSentAt = 0;
 
-  pinMode(FLASH_LED_PIN, OUTPUT);
-  digitalWrite(FLASH_LED_PIN, HIGH);
+void startCameraServer();
+const char *getDeviceId();
 
-  camera_config_t config;
+const char *getDeviceId() {
+  return deviceId;
+}
+
+static void connectToWifi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.setSleep(false);
+  WiFi.begin(ssid, password);
+
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(wifiReconnectDelayMs);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.print("WiFi connected. IP: ");
+  Serial.println(WiFi.localIP());
+}
+
+static bool ensureWifiConnected() {
+  if (WiFi.status() == WL_CONNECTED) {
+    return true;
+  }
+
+  Serial.println("WiFi lost. Reconnecting...");
+  WiFi.disconnect();
+  connectToWifi();
+  return WiFi.status() == WL_CONNECTED;
+}
+
+static void configureCamera(camera_config_t &config) {
   config.ledc_channel = LEDC_CHANNEL_0;
   config.ledc_timer = LEDC_TIMER_0;
 
@@ -42,76 +76,142 @@ void setup() {
 
   config.pin_sccb_sda = SIOD_GPIO_NUM;
   config.pin_sccb_scl = SIOC_GPIO_NUM;
-
   config.pin_pwdn = PWDN_GPIO_NUM;
   config.pin_reset = RESET_GPIO_NUM;
 
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
+  config.frame_size = kStreamFrameSize;
+  config.jpeg_quality = kJpegQuality;
+  config.fb_count = psramFound() ? 2 : 1;
+  config.grab_mode = CAMERA_GRAB_LATEST;
+}
 
-  config.frame_size = FRAMESIZE_UXGA;
-  config.jpeg_quality = 10;
-  config.fb_count = 2;
+static void onWebSocketEvent(WStype_t type, uint8_t *payload, size_t length) {
+  switch (type) {
+    case WStype_DISCONNECTED:
+      wsConnected = false;
+      Serial.println("WebSocket disconnected");
+      break;
 
-  // Camera Init
+    case WStype_CONNECTED:
+      wsConnected = true;
+      Serial.printf("WebSocket connected to: %s\n", payload);
+      break;
+
+    case WStype_TEXT:
+      Serial.printf("Server message: %s\n", payload);
+      break;
+
+    default:
+      break;
+  }
+}
+
+static void beginWebSocket() {
+  webSocket.begin(websocketHost, websocketPort, websocketPath);
+  webSocket.onEvent(onWebSocketEvent);
+  webSocket.setReconnectInterval(2000);
+  webSocket.enableHeartbeat(15000, 3000, 2);
+}
+
+static bool sendFrameMetadata(camera_fb_t *fb) {
+  char metadata[224];
+  int written = snprintf(
+    metadata, sizeof(metadata),
+    "{\"type\":\"frame-meta\",\"deviceId\":\"%s\",\"timestampSec\":%lld,\"timestampUsec\":%ld,\"length\":%u,\"format\":\"jpeg\",\"width\":%u,\"height\":%u}",
+    deviceId, fb->timestamp.tv_sec, fb->timestamp.tv_usec, (unsigned int)fb->len, fb->width, fb->height
+  );
+
+  if (written <= 0 || written >= (int)sizeof(metadata)) {
+    Serial.println("Failed to build frame metadata");
+    return false;
+  }
+
+  return webSocket.sendTXT((uint8_t *)metadata, (size_t)written);
+}
+
+static bool sendLiveFrame() {
+  if (!wsConnected) {
+    return false;
+  }
+
+  camera_fb_t *fb = esp_camera_fb_get();
+  if (!fb) {
+    Serial.println("Camera capture failed");
+    return false;
+  }
+
+  bool ok = sendFrameMetadata(fb);
+  if (ok) {
+    ok = webSocket.sendBIN(fb->buf, fb->len);
+  }
+
+  esp_camera_fb_return(fb);
+
+  if (!ok) {
+    Serial.println("Frame push failed");
+  }
+
+  return ok;
+}
+
+void setup() {
+  Serial.begin(115200);
+  Serial.setDebugOutput(true);
+  Serial.println();
+  Serial.println("Booting autonomous camera node...");
+
+  camera_config_t config;
+  configureCamera(config);
+
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
-    Serial.printf("Camera init failed: 0x%x", err);
+    Serial.printf("Camera init failed: 0x%x\n", err);
     return;
   }
 
-  // WiFi Connect
-  WiFi.begin(ssid, password);
-  WiFi.setSleep(false);
-
-  Serial.print("Connecting to WiFi");
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+  sensor_t *sensor = esp_camera_sensor_get();
+  if (sensor != nullptr) {
+    sensor->set_framesize(sensor, kStreamFrameSize);
+    sensor->set_quality(sensor, kJpegQuality);
   }
 
-  Serial.println("");
-  Serial.println("WiFi connected");
+  connectToWifi();
+  beginWebSocket();
 
-  // SD Card Init
-  if (!SD_MMC.begin()) {
-    Serial.println("SD Card Mount Failed");
-    return;
+  if (kEnableLocalDebugServer) {
+    startCameraServer();
+    Serial.print("Debug MJPEG stream: http://");
+    Serial.print(WiFi.localIP());
+    Serial.println(":81/stream");
   }
 
-  Serial.println("SD Card initialized");
-
-  // Start Camera Web Server
-  startCameraServer();
-
-  Serial.print("Camera Ready! Open: http://");
-  Serial.println(WiFi.localIP());
+  Serial.print("Push target: ws://");
+  Serial.print(websocketHost);
+  Serial.print(":");
+  Serial.print(websocketPort);
+  Serial.println(websocketPath);
 }
 
 void loop() {
-
-  camera_fb_t * fb = esp_camera_fb_get();
-
-  if (!fb) {
-    Serial.println("Camera capture failed");
+  if (!ensureWifiConnected()) {
+    delay(100);
     return;
   }
 
-  String path = "/image" + String(pictureNumber) + ".jpg";
+  webSocket.loop();
 
-  File file = SD_MMC.open(path.c_str(), FILE_WRITE);
-
-  if (!file) {
-    Serial.println("Failed to open file");
-  } else {
-    file.write(fb->buf, fb->len);
-    Serial.printf("Saved: %s\n", path.c_str());
-    pictureNumber++;
+  if (!wsConnected) {
+    delay(20);
+    return;
   }
 
-  file.close();
-  esp_camera_fb_return(fb);
+  if (millis() - lastFrameSentAt < kFrameIntervalMs) {
+    delay(1);
+    return;
+  }
 
-  delay(10000);   // Capture every 10 seconds
+  lastFrameSentAt = millis();
+  sendLiveFrame();
 }

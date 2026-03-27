@@ -1,5 +1,8 @@
 
-#if defined(CAMERA_MODEL_WROVER_KIT)
+#if defined(CAMERA_MODEL_CUSTOM_ESP32)
+#include "camera_custom_pins.h"
+
+#elif defined(CAMERA_MODEL_WROVER_KIT)
 #define PWDN_GPIO_NUM  -1
 #define RESET_GPIO_NUM -1
 #define XCLK_GPIO_NUM  21
@@ -163,7 +166,6 @@
 #define XCLK_GPIO_NUM  0
 #define SIOD_GPIO_NUM  26
 #define SIOC_GPIO_NUM  27
-
 #define Y9_GPIO_NUM    35
 #define Y8_GPIO_NUM    34
 #define Y7_GPIO_NUM    39

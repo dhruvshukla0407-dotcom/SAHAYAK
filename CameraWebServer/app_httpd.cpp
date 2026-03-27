@@ -17,6 +17,8 @@
 #include "img_converters.h"
 #include "fb_gfx.h"
 #include "esp32-hal-ledc.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "sdkconfig.h"
 #include "camera_index.h"
 #include "board_config.h"
@@ -24,6 +26,8 @@
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
 #include "esp32-hal-log.h"
 #endif
+
+extern const char *getDeviceId();
 
 // LED FLASH setup
 #if defined(LED_GPIO_NUM)
@@ -46,6 +50,13 @@ static const char *_STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %
 
 httpd_handle_t stream_httpd = NULL;
 httpd_handle_t camera_httpd = NULL;
+static TaskHandle_t ws_stream_task_handle = NULL;
+static int ws_client_fd = -1;
+static volatile bool ws_stream_enabled = false;
+static const TickType_t WS_STREAM_DELAY_TICKS = pdMS_TO_TICKS(50);
+
+static void ws_stream_task(void *pvParameters);
+static esp_err_t ws_handler(httpd_req_t *req);
 
 typedef struct {
   size_t size;   //number of values used for filtering
@@ -295,6 +306,150 @@ static esp_err_t stream_handler(httpd_req_t *req) {
 #endif
 
   return res;
+}
+
+static void close_ws_client() {
+  ws_stream_enabled = false;
+  ws_client_fd = -1;
+}
+
+static esp_err_t send_ws_text(httpd_handle_t handle, int socket_fd, const char *payload, size_t len) {
+  httpd_ws_frame_t ws_pkt = {};
+  ws_pkt.type = HTTPD_WS_TYPE_TEXT;
+  ws_pkt.payload = (uint8_t *)payload;
+  ws_pkt.len = len;
+  return httpd_ws_send_frame_async(handle, socket_fd, &ws_pkt);
+}
+
+static esp_err_t send_jpeg_over_ws(httpd_handle_t handle, int socket_fd, camera_fb_t *fb) {
+  httpd_ws_frame_t ws_pkt = {};
+  ws_pkt.type = HTTPD_WS_TYPE_BINARY;
+
+  uint8_t *jpeg_buf = NULL;
+  size_t jpeg_len = 0;
+  bool converted = false;
+
+  if (fb->format == PIXFORMAT_JPEG) {
+    jpeg_buf = fb->buf;
+    jpeg_len = fb->len;
+  } else {
+    converted = frame2jpg(fb, 80, &jpeg_buf, &jpeg_len);
+    if (!converted) {
+      log_e("JPEG conversion failed for WebSocket frame");
+      return ESP_FAIL;
+    }
+  }
+
+  ws_pkt.payload = jpeg_buf;
+  ws_pkt.len = jpeg_len;
+  esp_err_t res = httpd_ws_send_frame_async(handle, socket_fd, &ws_pkt);
+
+  if (converted && jpeg_buf) {
+    free(jpeg_buf);
+  }
+
+  return res;
+}
+
+static esp_err_t send_frame_metadata_over_ws(httpd_handle_t handle, int socket_fd, camera_fb_t *fb) {
+  char metadata[192];
+  int metadata_len = snprintf(
+    metadata, sizeof(metadata),
+    "{\"type\":\"frame-meta\",\"deviceId\":\"%s\",\"timestampSec\":%lld,\"timestampUsec\":%ld,\"length\":%u,\"format\":\"jpeg\"}",
+    getDeviceId(), fb->timestamp.tv_sec, fb->timestamp.tv_usec, (unsigned int)fb->len
+  );
+
+  if (metadata_len <= 0 || metadata_len >= (int)sizeof(metadata)) {
+    return ESP_FAIL;
+  }
+
+  return send_ws_text(handle, socket_fd, metadata, (size_t)metadata_len);
+}
+
+static void ws_stream_task(void *pvParameters) {
+  while (true) {
+    if (!ws_stream_enabled || ws_client_fd < 0 || camera_httpd == NULL) {
+      vTaskDelay(pdMS_TO_TICKS(50));
+      continue;
+    }
+
+    camera_fb_t *fb = esp_camera_fb_get();
+    if (!fb) {
+      log_e("Camera capture failed for WebSocket stream");
+      vTaskDelay(pdMS_TO_TICKS(100));
+      continue;
+    }
+
+    esp_err_t res = send_frame_metadata_over_ws(camera_httpd, ws_client_fd, fb);
+    if (res == ESP_OK) {
+      res = send_jpeg_over_ws(camera_httpd, ws_client_fd, fb);
+    }
+    esp_camera_fb_return(fb);
+
+    if (res != ESP_OK) {
+      log_w("WebSocket client disconnected");
+      close_ws_client();
+      vTaskDelay(pdMS_TO_TICKS(100));
+      continue;
+    }
+
+    vTaskDelay(WS_STREAM_DELAY_TICKS);
+  }
+}
+
+static esp_err_t ws_handler(httpd_req_t *req) {
+#ifndef CONFIG_HTTPD_WS_SUPPORT
+  httpd_resp_send_500(req);
+  return ESP_FAIL;
+#else
+  if (req->method == HTTP_GET) {
+    ws_client_fd = httpd_req_to_sockfd(req);
+    ws_stream_enabled = true;
+    log_i("WebSocket client connected on fd %d", ws_client_fd);
+    return ESP_OK;
+  }
+
+  httpd_ws_frame_t ws_pkt = {};
+  ws_pkt.type = HTTPD_WS_TYPE_TEXT;
+  esp_err_t ret = httpd_ws_recv_frame(req, &ws_pkt, 0);
+  if (ret != ESP_OK) {
+    log_e("WebSocket receive failed: %d", ret);
+    close_ws_client();
+    return ret;
+  }
+
+  if (ws_pkt.len > 0) {
+    uint8_t *buf = (uint8_t *)malloc(ws_pkt.len + 1);
+    if (!buf) {
+      return ESP_ERR_NO_MEM;
+    }
+
+    ws_pkt.payload = buf;
+    ret = httpd_ws_recv_frame(req, &ws_pkt, ws_pkt.len);
+    if (ret == ESP_OK) {
+      buf[ws_pkt.len] = '\0';
+      if (ws_pkt.type == HTTPD_WS_TYPE_TEXT) {
+        if (!strcmp((char *)buf, "start")) {
+          ws_client_fd = httpd_req_to_sockfd(req);
+          ws_stream_enabled = true;
+        } else if (!strcmp((char *)buf, "stop")) {
+          close_ws_client();
+        }
+      } else if (ws_pkt.type == HTTPD_WS_TYPE_CLOSE) {
+        close_ws_client();
+      }
+    }
+
+    free(buf);
+    return ret;
+  }
+
+  if (ws_pkt.type == HTTPD_WS_TYPE_CLOSE) {
+    close_ws_client();
+  }
+
+  return ESP_OK;
+#endif
 }
 
 static esp_err_t parse_get(httpd_req_t *req, char **obuf) {
@@ -814,6 +969,19 @@ void startCameraServer() {
 #endif
   };
 
+  httpd_uri_t ws_uri = {
+    .uri = "/ws",
+    .method = HTTP_GET,
+    .handler = ws_handler,
+    .user_ctx = NULL
+#ifdef CONFIG_HTTPD_WS_SUPPORT
+    ,
+    .is_websocket = true,
+    .handle_ws_control_frames = true,
+    .supported_subprotocol = NULL
+#endif
+  };
+
   ra_filter_init(&ra_filter, 20);
 
   log_i("Starting web server on port: '%d'", config.server_port);
@@ -829,6 +997,11 @@ void startCameraServer() {
     httpd_register_uri_handler(camera_httpd, &greg_uri);
     httpd_register_uri_handler(camera_httpd, &pll_uri);
     httpd_register_uri_handler(camera_httpd, &win_uri);
+    httpd_register_uri_handler(camera_httpd, &ws_uri);
+
+    if (ws_stream_task_handle == NULL) {
+      xTaskCreatePinnedToCore(ws_stream_task, "ws_stream", 4096, NULL, 1, &ws_stream_task_handle, 1);
+    }
   }
 
   config.server_port += 1;
