@@ -1,6 +1,10 @@
 
 #if defined(CAMERA_MODEL_CUSTOM_ESP32)
+<<<<<<< HEAD
 
+=======
+#include "camera_custom_pins.h"
+>>>>>>> origin/main
 
 #elif defined(CAMERA_MODEL_WROVER_KIT)
 #define PWDN_GPIO_NUM  -1
