@@ -58,7 +58,7 @@ app.get('/', (req, res) => {
 
 // --- ESP32-CAM Control Proxy ---
 const esp32Config = {
-  baseUrl: (process.env.ESP32_CAM_URL || 'http://192.168.1.100').replace(/\/$/, ''),
+  baseUrl: (process.env.ESP32_CAM_URL || 'http://192.168.4.1').replace(/\/$/, ''),
   capturePath: process.env.ESP32_CAPTURE_PATH || '/capture',
   streamPath: process.env.ESP32_STREAM_PATH || '/stream',
   controlPath: process.env.ESP32_CONTROL_PATH || '/control',
@@ -544,69 +544,47 @@ app.post('/api/esp32/config', (req, res) => {
 });
 
 app.get('/api/esp32/probe', async (req, res) => {
-  const snapshotUrl = buildEsp32Url(esp32Config.capturePath);
   const streamCandidates = buildEsp32StreamCandidates();
 
-  try {
-    const snapshotResponse = await axios.get(snapshotUrl, {
-      responseType: 'arraybuffer',
-      timeout: 5000,
-      headers: { Accept: 'image/jpeg,image/*;q=0.9,*/*;q=0.8' }
-    });
+  let streamResponse = null;
+  let workingStreamUrl = null;
+  let lastStreamError = null;
 
-    let streamResponse = null;
-    let workingStreamUrl = null;
-    let lastStreamError = null;
-
-    for (const candidateUrl of streamCandidates) {
-      try {
-        streamResponse = await axios.get(candidateUrl, {
-          responseType: 'stream',
-          timeout: 5000,
-          headers: { Accept: 'multipart/x-mixed-replace,image/jpeg,*/*;q=0.8' }
-        });
-        workingStreamUrl = candidateUrl;
-        break;
-      } catch (streamError) {
-        lastStreamError = streamError;
-      }
-    }
-
-    if (!streamResponse || !workingStreamUrl) {
-      return res.status(502).json({
-        success: false,
-        stage: 'stream',
-        snapshotUrl,
-        streamUrl: streamCandidates[0] || null,
-        triedStreamUrls: streamCandidates,
-        message: 'Snapshot works, but the MJPEG stream could not be opened from the backend.',
-        error: lastStreamError ? lastStreamError.message : 'Unknown stream error'
+  for (const candidateUrl of streamCandidates) {
+    try {
+      streamResponse = await axios.get(candidateUrl, {
+        responseType: 'stream',
+        timeout: 5000,
+        headers: { Accept: 'multipart/x-mixed-replace,image/jpeg,*/*;q=0.8' }
       });
+      workingStreamUrl = candidateUrl;
+      break;
+    } catch (streamError) {
+      lastStreamError = streamError;
     }
+  }
 
-    if (streamResponse?.data?.destroy) {
-      streamResponse.data.destroy();
-    }
-
-    return res.json({
-      success: true,
-      snapshotUrl,
-      streamUrl: workingStreamUrl,
-      triedStreamUrls: streamCandidates,
-      snapshotContentType: snapshotResponse.headers['content-type'] || 'unknown',
-      streamContentType: streamResponse.headers['content-type'] || 'unknown'
-    });
-  } catch (snapshotError) {
+  if (!streamResponse || !workingStreamUrl) {
     return res.status(502).json({
       success: false,
-      stage: 'snapshot',
-      snapshotUrl,
+      stage: 'stream',
       streamUrl: streamCandidates[0] || null,
       triedStreamUrls: streamCandidates,
-      message: 'The backend could not reach the ESP32-CAM snapshot endpoint.',
-      error: snapshotError.message
+      message: 'The backend could not reach the ESP32-CAM live stream endpoint.',
+      error: lastStreamError ? lastStreamError.message : 'Unknown stream error'
     });
   }
+
+  if (streamResponse?.data?.destroy) {
+    streamResponse.data.destroy();
+  }
+
+  return res.json({
+    success: true,
+    streamUrl: workingStreamUrl,
+    triedStreamUrls: streamCandidates,
+    streamContentType: streamResponse.headers['content-type'] || 'unknown'
+  });
 });
 
 app.get('/api/esp32/stream', async (req, res) => {

@@ -17,10 +17,7 @@
 #include "img_converters.h"
 #include "fb_gfx.h"
 #include "esp32-hal-ledc.h"
-<<<<<<< HEAD
 #include <WiFi.h>
-=======
->>>>>>> origin/main
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "sdkconfig.h"
@@ -61,10 +58,7 @@ static const TickType_t WS_STREAM_DELAY_TICKS = pdMS_TO_TICKS(50);
 
 static void ws_stream_task(void *pvParameters);
 static esp_err_t ws_handler(httpd_req_t *req);
-<<<<<<< HEAD
 static esp_err_t identity_handler(httpd_req_t *req);
-=======
->>>>>>> origin/main
 
 typedef struct {
   size_t size;   //number of values used for filtering
@@ -244,12 +238,9 @@ static esp_err_t stream_handler(httpd_req_t *req) {
 
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
   httpd_resp_set_hdr(req, "X-Framerate", "60");
-<<<<<<< HEAD
   httpd_resp_set_hdr(req, "Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
   httpd_resp_set_hdr(req, "Pragma", "no-cache");
   httpd_resp_set_hdr(req, "Connection", "close");
-=======
->>>>>>> origin/main
 
 #if defined(LED_GPIO_NUM)
   isStreaming = true;
@@ -466,7 +457,6 @@ static esp_err_t ws_handler(httpd_req_t *req) {
 #endif
 }
 
-<<<<<<< HEAD
 static esp_err_t identity_handler(httpd_req_t *req) {
   char json_response[320];
   const bool stationConnected = WiFi.status() == WL_CONNECTED;
@@ -492,8 +482,6 @@ static esp_err_t identity_handler(httpd_req_t *req) {
   return httpd_resp_send(req, json_response, strlen(json_response));
 }
 
-=======
->>>>>>> origin/main
 static esp_err_t parse_get(httpd_req_t *req, char **obuf) {
   char *buf = NULL;
   size_t buf_len = 0;
@@ -1024,7 +1012,6 @@ void startCameraServer() {
 #endif
   };
 
-<<<<<<< HEAD
   httpd_uri_t identity_uri = {
     .uri = "/identity",
     .method = HTTP_GET,
@@ -1038,8 +1025,6 @@ void startCameraServer() {
 #endif
   };
 
-=======
->>>>>>> origin/main
   ra_filter_init(&ra_filter, 20);
 
   log_i("Starting web server on port: '%d'", config.server_port);
@@ -1048,10 +1033,7 @@ void startCameraServer() {
     httpd_register_uri_handler(camera_httpd, &cmd_uri);
     httpd_register_uri_handler(camera_httpd, &status_uri);
     httpd_register_uri_handler(camera_httpd, &capture_uri);
-<<<<<<< HEAD
     httpd_register_uri_handler(camera_httpd, &stream_uri);
-=======
->>>>>>> origin/main
     httpd_register_uri_handler(camera_httpd, &bmp_uri);
 
     httpd_register_uri_handler(camera_httpd, &xclk_uri);
@@ -1060,10 +1042,7 @@ void startCameraServer() {
     httpd_register_uri_handler(camera_httpd, &pll_uri);
     httpd_register_uri_handler(camera_httpd, &win_uri);
     httpd_register_uri_handler(camera_httpd, &ws_uri);
-<<<<<<< HEAD
     httpd_register_uri_handler(camera_httpd, &identity_uri);
-=======
->>>>>>> origin/main
 
     if (ws_stream_task_handle == NULL) {
       xTaskCreatePinnedToCore(ws_stream_task, "ws_stream", 4096, NULL, 1, &ws_stream_task_handle, 1);

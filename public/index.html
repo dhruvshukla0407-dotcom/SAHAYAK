@@ -4007,7 +4007,7 @@
 
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
 
-              <input id="esp32BaseUrl" type="text" placeholder="http://192.168.1.100"
+              <input id="esp32BaseUrl" type="text" placeholder="http://192.168.4.1"
 
                 style="width:100%;padding:8px 10px;border-radius:6px;border:1px solid var(--border2);background:var(--surface3);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;outline:none;" />
 
@@ -4043,7 +4043,7 @@
             <div style="font-size:10px;color:var(--text3);line-height:1.6;">
 
               Recommended setup: power the ESP32-CAM from a USB adapter or battery bank, let it join Wi-Fi, then point the backend to it once.<br />
-              Default stream path on the ESP32-CAM: <span class="mono">http://ESP32-IP:81/stream</span><br />
+              Default stream path on the ESP32-CAM hotspot: <span class="mono">http://192.168.4.1:81/stream</span><br />
               The website will read the video through the backend proxy so the browser does not need direct access to the camera.<br />
               Model path: <span class="mono">/models/yolov8n.onnx</span><br />
 
@@ -5860,8 +5860,11 @@
 
     function getEsp32StreamUrl(config) {
 
-      if (config?.proxyStreamUrl) {
-        return `${BACKEND_URL}${config.proxyStreamUrl}`;
+      if (config?.resolvedStreamUrl) {
+        return config.resolvedStreamUrl;
+      }
+      if (config?.fallbackStreamUrl) {
+        return config.fallbackStreamUrl;
       }
 
       if (!config?.baseUrl) return '';
@@ -6022,25 +6025,41 @@
     }
 
     function startEsp32DetectionLoop() {
+      if (esp32DetectionLoopHandle) {
+        cancelAnimationFrame(esp32DetectionLoopHandle);
+        esp32DetectionLoopHandle = null;
+      }
 
-      if (esp32DetectionLoopHandle || backendVisionEnabled) return;
+    }
 
-      const step = (timestamp) => {
-        if (feedMode !== 'esp32') {
-          esp32DetectionLoopHandle = null;
-          return;
+    async function autoConnectEsp32Feed() {
+
+      const config = await loadEsp32Config();
+      if (!config?.baseUrl) return;
+
+      const input = document.getElementById('esp32BaseUrl');
+      const streamInput = document.getElementById('esp32StreamPath');
+      if (!input || !streamInput) return;
+
+      const baseUrl = input.value.trim();
+      const streamPath = streamInput.value.trim() || '/stream';
+      if (!baseUrl || !streamPath) return;
+
+      setVisionStatus(`Auto-checking the ESP32-CAM stream at ${baseUrl} ...`, 'info');
+
+      try {
+        const probeRes = await fetch(`${BACKEND_URL}/api/esp32/probe`);
+        const probeData = await probeRes.json();
+        if (!probeRes.ok || !probeData.success) {
+          throw new Error(probeData.message || 'Probe failed.');
         }
 
-        const frameReady = esp32FrameImage && esp32FrameImage.complete && esp32FrameImage.naturalWidth && esp32FrameImage.naturalHeight;
-        if (frameReady && detectorSession && !detectorBusy && (timestamp - lastEsp32InferenceAt) >= ESP32_INFERENCE_INTERVAL_MS) {
-          lastEsp32InferenceAt = timestamp;
-          void runYoloOnSource(esp32FrameImage);
-        }
-
-        esp32DetectionLoopHandle = requestAnimationFrame(step);
-      };
-
-      esp32DetectionLoopHandle = requestAnimationFrame(step);
+        setVisionStatus(`ESP32-CAM ready. Opening live stream from ${probeData.streamUrl}.`, 'success');
+        await connectEsp32Feed();
+      } catch (error) {
+        console.error('[AEGIS] Auto-connect skipped:', error);
+        setVisionStatus(`ESP32-CAM config loaded. Click Connect ESP32-CAM to open ${baseUrl}:81${streamPath}.`, 'info');
+      }
 
     }
 
@@ -6076,18 +6095,34 @@
       const config = await saveEsp32Config(false) || await loadEsp32Config();
       if (!config) return;
 
-      const streamUrl = getEsp32StreamUrl(config);
-      if (!streamUrl) {
-        setVisionStatus('Could not build the ESP32-CAM stream URL.', 'error');
-        return;
-      }
+      let streamUrl = getEsp32StreamUrl(config);
 
       stopEsp32Feed(false);
       feedMode = 'esp32';
       latestDetections = [];
       updateVisionModeUi();
       renderVisionSummary();
-      setVisionStatus(`Connecting to the ESP32-CAM through the backend at ${streamUrl} ...`, 'info');
+      setVisionStatus('Checking the ESP32-CAM live stream before opening it on the page ...', 'info');
+
+      try {
+        const probeRes = await fetch(`${BACKEND_URL}${config.probeUrl || '/api/esp32/probe'}`);
+        const probeData = await probeRes.json();
+        if (!probeRes.ok || !probeData.success) {
+          throw new Error(`${probeData.message || 'Probe failed.'} URL: ${probeData.streamUrl || probeData.snapshotUrl || 'unknown'} Error: ${probeData.error || 'unknown'}`);
+        }
+        streamUrl = probeData.streamUrl || streamUrl;
+      } catch (error) {
+        console.error('[AEGIS] ESP32 probe failed before opening live stream:', error);
+        setVisionStatus(error.message || 'Could not verify the ESP32-CAM live stream.', 'error');
+        return;
+      }
+
+      if (!streamUrl) {
+        setVisionStatus('Could not build the ESP32-CAM stream URL.', 'error');
+        return;
+      }
+
+      setVisionStatus(`Connecting to the ESP32-CAM live stream at ${streamUrl} ...`, 'info');
 
       const image = getEsp32FrameElement();
       if (!image) {
@@ -6106,7 +6141,7 @@
       };
       image.onerror = (error) => {
         console.error('[AEGIS] ESP32 stream failed:', error);
-        setVisionStatus(`Could not open the ESP32-CAM stream at ${streamUrl}. Check ESP32 power, Wi-Fi, and backend connectivity.`, 'error');
+        setVisionStatus(`Could not open the ESP32-CAM stream at ${streamUrl}. Check ESP32 power, Wi-Fi, and whether the browser can reach that camera URL.`, 'error');
       };
       image.src = `${streamUrl}${streamUrl.includes('?') ? '&' : '?'}ts=${Date.now()}`;
       esp32FrameImage = image;
@@ -6502,13 +6537,38 @@
 
     // Call initMap on window load
 
-    window.addEventListener('load', initMap);
+    window.addEventListener('load', () => {
+      initMap();
+      autoConnectEsp32Feed();
+    });
 
 
 
     // --- Socket.IO Integration ---
 
     const socket = io(BACKEND_URL);
+
+    socket.on('vision_update', (payload = {}) => {
+
+      backendVisionEnabled = !!payload.running;
+      detectorSession = payload.running ? { backend: true } : detectorSession;
+      latestDetections = Array.isArray(payload.detections) ? payload.detections : [];
+      lastYoloDebug = payload.debug || (payload.running ? 'Backend YOLO active.' : 'Backend detector idle.');
+
+      if (latestDetections.length) {
+        lastDetectionAt = Date.now();
+      }
+
+      if (!payload.running && !latestDetections.length) {
+        detectorSession = null;
+      }
+
+      if (feedMode === 'esp32') {
+        drawVideoCanvas();
+      }
+      renderVisionSummary();
+
+    });
 
 
 
